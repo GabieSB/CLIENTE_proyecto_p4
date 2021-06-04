@@ -21,6 +21,7 @@
           name="usuario"
           placeholder="Usuario"
           v-model="usuario"
+          required
         />
         <input
           type="text"
@@ -29,7 +30,7 @@
           name="login"
           placeholder="Password"
           v-model="password"
-        />
+          required        />
         <input type="submit" class="fadeIn fourth" value="Log In" />
       </form>
 
@@ -67,9 +68,7 @@ export default {
       console.log(this.usuario);
 
       axios
-        .get(
-          "http://127.0.0.1:5000/login/" + this.usuario + "/" + this.password
-        )
+        .get(process.env.VUE_APP_API_URL+ "login/" + this.usuario + "/" + this.password )
         .then((data) => {
           console.log(data);
           if (data.statusText == "OK") {
@@ -77,10 +76,16 @@ export default {
             this.$router.push("dashboard");
           }
         }).catch((error)=>{
-          
-            this.usuario = '';
-            this.password = '';
-            this.$alertify.error('Usuario o contraseña incorrecta')
+
+          if(error.response.status == 500){
+            this.$alertify.error('Han surgido problemas para conectarse con el servidor. Inténtelo más tarde.')
+          }else{
+            this.$alertify.error(error.response.data)
+          }
+         
+          this.password = '';
+          this.usuario = '';
+         
         });
     },
   },
