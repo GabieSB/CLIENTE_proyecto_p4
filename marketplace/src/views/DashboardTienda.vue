@@ -1,7 +1,7 @@
 <template>
     <div>
         <Header></Header>
-        <h1>{{usuario}}</h1>
+          <h1>Soy una tienda</h1>
     </div>
   
 </template>

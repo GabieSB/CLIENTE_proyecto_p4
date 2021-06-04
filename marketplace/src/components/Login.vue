@@ -73,11 +73,15 @@ export default {
           console.log(data);
           if (data.statusText == "OK") {
             localStorage.user = data.data; //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
-            this.$router.push("dashboard");
+            if(data.data.usuario_tipo == 'C'){
+               this.$router.push("dashboardComprador");
+            }else{
+              this.$router.push("dashboardTienda");
+            }
           }
         }).catch((error)=>{
 
-          if(error.response.status == 500){
+          if(error.response.status == 500 || error.response.status == 404 ){
             this.$alertify.error('Han surgido problemas para conectarse con el servidor. Inténtelo más tarde.')
           }else{
             this.$alertify.error(error.response.data)

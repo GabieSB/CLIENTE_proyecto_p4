@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Dashboard from '../views/Dashboard.vue'
+import Dashboard from '../views/DashboardTienda.vue'
 
 
 Vue.use(VueRouter);
@@ -22,11 +22,18 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard', 
+    path: '/dashboardTienda',
+    name: 'DashboardTienda', 
 
 
-    component: () => import(/* webpackChunkName: "Dashboard" */ '../views/Dashboard.vue')
+    component: () => import(/* webpackChunkName: "DashboardTienda" */ '../views/DashboardTienda.vue')
+  },
+  {
+    path: '/dashboardComprador',
+    name: 'DashboardComprador', 
+
+
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/DashboardComprador.vue')
   }
  
   
