@@ -39,6 +39,7 @@
         <a class="underlineHover" href="#">Forgot Password?</a>
       </div>
     </div>
+    <a id="registration_link" v-on:click='goToRegistration'>--Aun no tengo una cuenta--</a>
   </div>
 </template>
 
@@ -81,16 +82,22 @@ export default {
           }
         }).catch((error)=>{
 
-          if(error.response.status == 500 || error.response.status == 404 ){
-            this.$alertify.error('Han surgido problemas para conectarse con el servidor. Inténtelo más tarde.')
-          }else{
-            this.$alertify.error(error.response.data)
+          if(error.response)
+          {
+            if(error.response.status == 500 || error.response.status == 404 ){
+              this.$alertify.error('Han surgido problemas para conectarse con el servidor. Inténtelo más tarde.')
+            }else{
+              this.$alertify.error(error.response.data)
+            }
+          } else {
+            this.$alertify.error('No se ha podido establecer conexión con el servidor.')
           }
-         
           this.password = '';
           this.usuario = '';
-         
         });
+    },
+    goToRegistration(){
+      this.$router.push("crudUsuario");
     },
   },
 };
@@ -112,6 +119,17 @@ a {
   display: inline-block;
   text-decoration: none;
   font-weight: 400;
+}
+
+#registration_link {
+  transition: 200ms;
+  color: #2196F3;
+}
+
+#registration_link:hover {
+  color: #9C27B0;
+  font-weight: bold;
+  
 }
 
 h2 {
