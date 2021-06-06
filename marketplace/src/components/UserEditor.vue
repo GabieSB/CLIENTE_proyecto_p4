@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <h1>Editor de usuarios</h1>
-    <div class="row">
+    <form class="row">
       <div class="col-sm-6" style="background-color: #f5f5f5">
         <div>
           <label class="inputLabel" for="cedula"
@@ -12,17 +12,19 @@
           id="cedula"
           type="text"
           placeholder="Ingresa tu cédula física o jurídica"
+          required
         />
 
         <div>
           <label class="inputLabel" for="nombreCompleto"
-            >Nombre completo o de tu nueva tienda</label
+            >Nombre completo o de tu tienda</label
           >
         </div>
         <input
           id="nombreCompleto"
           type="text"
-          placeholder="Ingresa tu nombre o el de tu nueva tienda"
+          placeholder="Ingresa tu nombre o el de tu tienda"
+          required
         />
 
         <div>
@@ -31,14 +33,16 @@
         <input
           id="correo"
           type="text"
-          placeholder="Ingresa tu nombre o el de tu nueva tienda"
+          placeholder="Ingresa tu nombre o el de tu tienda"
+          required
         />
 
         <div><label class="inputLabel" for="telefono">Teléfono</label></div>
         <input
           id="telefono"
           type="text"
-          placeholder="Ingresa tu nombre o el de tu nueva tienda"
+          placeholder="Ingresa tu nombre o el de tu tienda"
+          required
         />
       </div>
       <div class="col-sm-4" style="background-color: #f5f5f5">
@@ -49,6 +53,7 @@
           id="usuario"
           type="text"
           placeholder="Ingresa una contraseña segura"
+          required
         />
 
         <div><label class="inputLabel" for="password">Contraseña</label></div>
@@ -57,27 +62,38 @@
           id="password"
           type="password"
           placeholder="Ingresa una contraseña segura"
+          required
         />
-        <div id="tipe_select">
-          <h4>Tipo de usuario</h4>
-          <label class="r_type" for="tienda">Tienda</label>
-          <input id="tienda" type="radio" name="usr_type" />
-
-          <label class="r_type" for="cliente">Cliente</label>
-          <input id="cliente" type="radio" name="usr_type" />
+        <div><label class="inputLabel">Dirección</label></div>
+        <div class="form-row" style="background-color: #f5f5f5">
+          <input class="sr-only" id="pais" type="text" placeholder="País" required/>
+          <input id="provincia" type="text" placeholder="Provincia" required/>
+          <input id="canton" type="text" placeholder="Cantón" required/>
         </div>
       </div>
       <div class="col-sm-2" style="background-color: #f5f5f5">
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-        illo inventore veritatis et quasi architecto.
+        <img
+          class="profile-pic"
+          src="https://xn--diseoscreativos-1qb.com/wp-content/uploads/2018/06/Imagenes-de-gatos-www.dise%C3%B1oscreativos.com-portada-3-1.jpg"
+          alt="foto de perfil"
+        />
+        <input id="picSelector" type="file" accept=".png, .jpg, .jpge" />
+        <div id="tipe_select">
+          <h4>Tipo de usuario</h4>
+          <label class="r_type" for="tienda">Tienda</label>
+          <input id="tienda" type="radio" name="usr_type" required/>
+
+          <label class="r_type" for="cliente">Cliente</label>
+          <input id="cliente" type="radio" name="usr_type" required/>
+        </div>
       </div>
-      <div class="col-sm-12"  style="background-color: #f5f5f5">
-        <button class="act_btn btn-success">Guardar cambios</button>
-        <button class="act_btn btn-warning">Limpiar campos</button>
+      <div class="form-group" style="background-color: #f5f5f5">
+        <button class="btn act_btn btn-success btn-lg" type="submit">
+          Guardar cambios
+        </button>
+        <button class="btn act_btn btn-warning btn-lg">Limpiar campos</button>
       </div>
-    </div>
-    
+    </form>
   </div>
 </template>
 
@@ -137,30 +153,45 @@ input {
 }
 
 #tipe_select {
-  margin-top: 25px;
+  position: relative;
   margin-left: 1%;
   padding-left: 5px;
   background: #90caf9;
-  width: 85%;
   border-radius: 4px;
   height: 80px;
-  -webkit-box-shadow: -2px 3px 28px -8px rgba(77,169,240,1);
-  -moz-box-shadow: -2px 3px 28px -8px rgba(77,169,240,1);
-  box-shadow: -2px 3px 28px -8px rgba(77,169,240,1);
+  top: 40%;
+  -webkit-box-shadow: -2px 3px 28px -8px rgba(77, 169, 240, 1);
+  -moz-box-shadow: -2px 3px 28px -8px rgba(77, 169, 240, 1);
+  box-shadow: -2px 3px 28px -8px rgba(77, 169, 240, 1);
 }
 
 .r_type {
   margin-left: 10px;
 }
 
-.col-sm-12{
+.col-sm-12 {
   padding-top: 25px;
 }
 
-.act_btn{
-  border: none;
-  height: 40px;
-  border-radius: 5px;
-  margin-left: 75px;
+.act_btn {
+  position: relative;
+  margin: 25px;
+  left: 33%;
+}
+
+.profile-pic {
+  position: relative;
+  border-radius: 100px;
+  height: 150px;
+  width: 150px;
+  top: 25%;
+  left: 33%;
+}
+
+#picSelector {
+  position: relative;
+  top: 27%;
+  width: 70%;
+  transform: translateX(25%);
 }
 </style>
