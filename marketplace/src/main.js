@@ -1,9 +1,10 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import axios from "axios"
+import axios from "axios";
 import VueAxios from 'vue-axios'
-import VueAlertify from "vue-alertify"
+import VueAlertify from "vue-alertify";
+
 
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
@@ -24,3 +25,4 @@ new Vue({
   router,
   render: (h) => h(App),
 }).$mount("#app");
+

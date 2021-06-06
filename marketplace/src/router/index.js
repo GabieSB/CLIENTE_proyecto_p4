@@ -1,8 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Dashboard from '../views/DashboardTienda.vue'
-
+import Dashboard from '../views/DashboardTienda.vue';
 
 Vue.use(VueRouter);
 
