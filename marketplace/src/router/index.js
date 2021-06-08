@@ -37,10 +37,27 @@ const routes = [
   },
   {
     path: '/crudUsuario',
-    name: 'CrudUsuario', 
+    name: 'CrudUsuario',
+    props:true,
 
 
     component: () => import('../views/CrudUsuario.vue')
+  },
+  {
+    path: '/crudTienda',
+    name: 'CrudTienda',
+    props:true,
+
+
+    component: () => import('../views/CrudTienda.vue')
+  },
+  {
+    path: '/crudComprador',
+    name: 'CrudComprador',
+    props:true,
+
+
+    component: () => import('../views/CrudComprador.vue')
   }
  
   

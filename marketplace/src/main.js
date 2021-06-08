@@ -20,7 +20,10 @@ Vue.use(VueAlertify)
 
 Vue.config.productionTip = false;
 
-new Vue({
+export const main = new Vue({
   router,
+  data: {
+    AppContext: {}
+  },
   render: (h) => h(App),
 }).$mount("#app");

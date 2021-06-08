@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <h1>Editor de usuarios</h1>
+    <h1>Datos de usario</h1>
     <form class="row" v-on:submit.prevent='saveData'>
       <div class="col-sm-6" style="background-color: #f5f5f5">
         <div>
@@ -106,12 +106,6 @@
         </div>
       </div>
       <div class="col-sm-2" style="background-color: #f5f5f5">
-        <img
-          class="profile-pic"
-          src="https://xn--diseoscreativos-1qb.com/wp-content/uploads/2018/06/Imagenes-de-gatos-www.dise%C3%B1oscreativos.com-portada-3-1.jpg"
-          alt="foto de perfil"
-        />
-        <input id="picSelector" type="file" accept=".png, .jpg, .jpge" />
         <div id="tipe_select">
           <h4>Tipo de usuario</h4>
           <label class="r_type" for="tienda">Tienda</label>
@@ -137,9 +131,8 @@
       </div>
       <div class="form-group" style="background-color: #f5f5f5">
         <button class="btn act_btn btn-success btn-lg" type="submit">
-          Guardar cambios
+          Siguiente
         </button>
-        <button class="btn act_btn btn-warning btn-lg">Limpiar campos</button>
       </div>
     </form>
   </div>
@@ -148,6 +141,7 @@
 
 <script>
 import axios from "axios";
+import {main} from '../main.js'
 
 export default {
   setup() {},
@@ -201,8 +195,13 @@ export default {
     },
 
     saveData() {
-      let data = this.buildFormData();
-      this.insertData(data);
+      main.AppContext['userData'] = this.buildFormData();
+      if(this.tipoUsario == 'T'){
+        this.$router.push('crudTienda');
+      }else{
+        this.$router.push('crudComprador');
+      }
+      
     },
 
     buildFormData() {
@@ -283,22 +282,7 @@ input {
 .act_btn {
   position: relative;
   margin: 25px;
-  left: 33%;
+  left: 40%;
 }
 
-.profile-pic {
-  position: relative;
-  border-radius: 100px;
-  height: 150px;
-  width: 150px;
-  top: 25%;
-  left: 33%;
-}
-
-#picSelector {
-  position: relative;
-  top: 27%;
-  width: 70%;
-  transform: translateX(25%);
-}
 </style>

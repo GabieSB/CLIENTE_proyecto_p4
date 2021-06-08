@@ -1,18 +1,16 @@
 <template>
-    <UserEditor></UserEditor>
-    
+    <CompradorExtraForm></CompradorExtraForm>
 </template>
-
 
 <script>
 // @ is an alias to /src
-    import UserEditor from '@/components/UserEditor.vue'
+    import CompradorExtraForm from '@/components/CompradorExtraForm.vue'
 
     export default {
-        name: "CrudUsuarios",
+        name: "CrudComprador",
         props: ['items'],
         components: {
-            UserEditor,
+            CompradorExtraForm,
         },
         data: () => ({
      
