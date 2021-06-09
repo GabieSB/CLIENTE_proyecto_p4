@@ -46,6 +46,7 @@
 <script>
 
 import axios from "axios";
+import { main } from "../main.js";
 
 // @ is an alias to /src
 export default {
@@ -97,6 +98,7 @@ export default {
         });
     },
     goToRegistration(){
+      main.AppContext['userData'] = undefined;
       this.$router.push("crudUsuario");
     },
   },

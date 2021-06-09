@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <h1>Datos de usario</h1>
-    <form class="row" v-on:submit.prevent='saveData'>
+    <form class="row" v-on:submit.prevent="saveData">
       <div class="col-sm-6" style="background-color: #f5f5f5">
         <div>
           <label class="inputLabel" for="cedula"
@@ -141,7 +141,7 @@
 
 <script>
 import axios from "axios";
-import {main} from '../main.js'
+import { main } from "../main.js";
 
 export default {
   setup() {},
@@ -161,11 +161,14 @@ export default {
     tipoUsario: "",
   }),
 
+  mounted() {
+    this.deployPrechagedData();
+  },
+
   methods: {
     proccessAxiosError(error) {
       if (error.response) {
         if (error.response.status == 500 || error.response.status == 404) {
-          
           this.$alertify.error(
             "Han surgido problemas para conectarse con el servidor. Inténtelo más tarde."
           );
@@ -186,7 +189,7 @@ export default {
           JSON.stringify(formData)
         )
         .then((response) => {
-          this.$router.push('/');
+          this.$router.push("/");
           this.$alertify.success(response.data);
         })
         .catch((error) => {
@@ -195,13 +198,12 @@ export default {
     },
 
     saveData() {
-      main.AppContext['userData'] = this.buildFormData();
-      if(this.tipoUsario == 'T'){
-        this.$router.push('crudTienda');
-      }else{
-        this.$router.push('crudComprador');
+      main.AppContext["userData"] = this.buildFormData();
+      if (this.tipoUsario == "T") {
+        this.$router.push("crudTienda");
+      } else {
+        this.$router.push("crudComprador");
       }
-      
     },
 
     buildFormData() {
@@ -217,6 +219,23 @@ export default {
         direccion_provincia: this.provincia,
         direccion_canton: this.canton,
       };
+    },
+
+    deployPrechagedData(){
+        if(main.AppContext['userData'] != undefined){
+          let data = main.AppContext['userData'];
+
+          this.usuario =data['usuario_nom_urs'];
+          this.password = data['usuario_contrasena'];
+          this.email = data['usuario_email'];
+          this.telefono = data['usuario_telefono'];
+          this.cedula = data['usuario_cedula'];
+          this.nombreCompleto = data['usuario_nombre_compl'];
+          this.tipoUsario = data['usuario_tipo'];
+          this.pais = data['direcciion_pais'];
+          this.provincia = data['direccion_provincia'];
+          this.canton = data['direccion_canton'];
+        }
     },
   },
 };
@@ -284,5 +303,4 @@ input {
   margin: 25px;
   left: 40%;
 }
-
 </style>

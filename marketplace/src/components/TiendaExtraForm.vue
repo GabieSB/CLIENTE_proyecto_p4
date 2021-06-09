@@ -1,19 +1,24 @@
 <template>
   <div class="container-fluid">
-      <h1>Datos adicionales de la tienda</h1>
-    <form class="row">
+    <h1>Datos adicionales de la tienda</h1>
+    <form class="row" v-on:submit.prevent="saveData">
       <div class="col-sm-8" style="background-color: #f5f5f5">
         <div class="desc_form" style="background-color: #f5f5f5">
-            <label class="inputLabel" for='descripcion'>Detalles</label>
+          <label class="inputLabel" for="descripcion">Descripción</label>
           <b-textarea
             name="descripcion"
-            id="descripcion"
+            id="descripc1ion"
             cols="30"
             rows="20"
             maxlength="512"
             placeholder="Ingresa aqui observaciones o detalles sobre tu tienda"
+            v-model="detalles"
           ></b-textarea>
-          <b-button class="submit-btn btn-success" v-on:click="prueba">Finzalizar y guardar</b-button>
+          <b-button
+            class="submit-btn btn-success"
+            type="submit"
+            >Finzalizar y guardar</b-button
+          >
         </div>
       </div>
       <div class="col-sm-4" style="background-color: #f5f5f5">
@@ -31,22 +36,63 @@
 
 <script>
 import axios from "axios";
-import {main} from '../main.js'
+import { main } from "../main.js";
 
-export default ({
-    setup() {},
+export default {
+  setup() {},
 
   name: "DetallesTienda",
-  props: ['items'],
+  props: ["items"],
 
-  data: () => ({}),
-  methods:{
-      prueba(){
-          let rrrrrr = main.AppContext['userData'];
-          console.log(rrrrrr);
-      },
+  data: () => ({
+    detalles: "",
+  }),
+  methods: {
+
+    buildUserData() {
+      let lastData = main.AppContext["userData"];
+      lastData["tienda_descripcion"] = this.detalles;
+      return lastData;
+    },
+
+    proccessAxiosError(error) {
+      if (error.response) {
+        if (error.response.status == 500 || error.response.status == 404) {
+          this.$alertify.error(
+            "Han surgido problemas para conectarse con el servidor. Inténtelo más tarde."
+          );
+        } else {
+          this.$alertify.error(error.response.data);
+        }
+      } else {
+        this.$alertify.error(
+          "No se ha podido establecer conexión con el servidor."
+        );
+      }
+    },
+
+    insertData(formData) {
+      axios
+        .post(
+          process.env.VUE_APP_API_URL + "/create_usuario",
+          JSON.stringify(formData)
+        )
+        .then((response) => {
+          this.$router.push("/");
+          this.$alertify.success(response.data);
+          main.AppContext['userData'] = undefined;           //Se limpia entrada de datos "userData" del AppContext
+        })
+        .catch((error) => {
+          this.proccessAxiosError(error);
+        });
+    },
+
+    saveData() {
+      let allData = this.buildUserData();
+      this.insertData(allData);
+    },
   },
-})
+};
 </script>
 
 
@@ -75,8 +121,8 @@ export default ({
   width: 70%;
 }
 
-.submit-btn{
-    margin-top: 50px;
+.submit-btn {
+  margin-top: 50px;
 }
 
 .inputLabel {
