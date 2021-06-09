@@ -14,9 +14,7 @@
             placeholder="Ingresa aqui observaciones o detalles sobre tu tienda"
             v-model="detalles"
           ></b-textarea>
-          <b-button
-            class="submit-btn btn-success"
-            type="submit"
+          <b-button class="submit-btn btn-success" type="submit"
             >Finzalizar y guardar</b-button
           >
         </div>
@@ -27,7 +25,13 @@
           src="https://xn--diseoscreativos-1qb.com/wp-content/uploads/2018/06/Imagenes-de-gatos-www.dise%C3%B1oscreativos.com-portada-3-1.jpg"
           alt="foto de perfil"
         />
-        <input id="picSelector" type="file" accept=".png, .jpg, .jpge" />
+        <input
+          id="picSelector"
+          type="file"
+          accept=".png, .jpg, .jpge"
+          v-on:change="chargeProfilePic"
+          ref="profilePic"
+        />
       </div>
     </form>
   </div>
@@ -46,9 +50,9 @@ export default {
 
   data: () => ({
     detalles: "",
+    fotoPerfil: undefined,
   }),
   methods: {
-
     buildUserData() {
       let lastData = main.AppContext["userData"];
       lastData["tienda_descripcion"] = this.detalles;
@@ -80,7 +84,7 @@ export default {
         .then((response) => {
           this.$router.push("/");
           this.$alertify.success(response.data);
-          main.AppContext['userData'] = undefined;           //Se limpia entrada de datos "userData" del AppContext
+          main.AppContext["userData"] = undefined; //Se limpia entrada de datos "userData" del AppContext
         })
         .catch((error) => {
           this.proccessAxiosError(error);
@@ -91,6 +95,23 @@ export default {
       let allData = this.buildUserData();
       this.insertData(allData);
     },
+
+    chargeProfilePic() {
+      let file = this.$refs.profilePic.files[0];
+      if(file){
+        let reader = new FileReader();
+
+        reader.onload = (evnt) =>{
+          this.fotoPerfil = evnt.target.result;
+        }
+
+        reader.readAsBinaryString(file);
+        
+      }else{
+        this.fotoPerfil = undefined;
+      }
+    },
+    
   },
 };
 </script>

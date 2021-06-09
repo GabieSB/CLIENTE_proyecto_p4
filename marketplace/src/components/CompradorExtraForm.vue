@@ -44,7 +44,7 @@
           src="https://xn--diseoscreativos-1qb.com/wp-content/uploads/2018/06/Imagenes-de-gatos-www.dise%C3%B1oscreativos.com-portada-3-1.jpg"
           alt="foto de perfil"
         />
-        <input id="picSelector" type="file" accept=".png, .jpg, .jpge" />
+        <input id="picSelector" type="file" accept=".png, .jpg, .jpge" v-on:change="chargeProfilePic"/>
       </div>
     </form>
   </div>
@@ -64,6 +64,7 @@ export default {
     codigoPostal: "",
     casillero: "",
     observaciones: "",
+    fotoPerfil: null,
   }),
 
   methods: {
@@ -111,6 +112,10 @@ export default {
       let allData = this.buildUserData();
       this.insertData(allData);
     },
+
+    chargeProfilePic(){
+
+    }
   },
 };
 </script>
