@@ -20,7 +20,6 @@ Vue.use(VueAxios, axios)
 Vue.use(VueAlertify)
 
 Vue.config.productionTip = false;
-
 new Vue({
   router,
   render: (h) => h(App),

@@ -33,8 +33,12 @@ const routes = [
 
 
     component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/DashboardComprador.vue')
+  },
+  {
+    path: '/tiendas',
+    name: 'Tiendas', 
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/Tiendas.vue')
   }
- 
   
 ];
 
