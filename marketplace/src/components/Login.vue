@@ -41,22 +41,36 @@
 </template>
 
 <script>
+
 import axios from "axios";
 
 // @ is an alias to /src
 export default {
 
     name: "Login",
-    components: {
+  components: {
+    
+  },
 
+  data: () => ({
+    usuario: "",
+    password: "",
+    error: false,
+  }),
+
+  methods: {
+    onClick() {
+      console.log("Vue 2");
     },
+    login() {
+      console.log(this.usuario);
 
       axios
         .get(process.env.VUE_APP_API_URL+ "login/" + this.usuario + "/" + this.password )
         .then((data) => {
         
           if (data.statusText == "OK") {
-            localStorage.setItem('tienda_id', data.data.tienda_id)  //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
+          //  localStorage.setItem('tienda_id', data.data.tienda_id)  //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
             this.$store.state.usuario = data.data;
             console.log(this.$store.state.usuario)
             if(data.data.usuario_tipo == 'C'){
@@ -67,39 +81,18 @@ export default {
           }
         }).catch((error)=>{
 
-    methods: {
-        onClick() {
-            console.log("Vue 2");
-        },
-        login() {
-            console.log(this.usuario);
-
-            axios
-                .get(process.env.VUE_APP_API_URL + "login/" + this.usuario + "/" + this.password)
-                .then((data) => {
-                    console.log(data);
-                    if (data.statusText == "OK") {
-                        localStorage.user = data.data; //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
-                        if (data.data.usuario_tipo == 'C') {
-                            this.$router.push("dashboardComprador");
-                        } else {
-                            this.$router.push("dashboardTienda");
-                        }
-                    }
-                }).catch((error) => {
-
-                    if (error.response.status == 500 || error.response.status == 404) {
-                        this.$alertify.error('Han surgido problemas para conectarse con el servidor. Inténtelo más tarde.')
-                    } else {
-                        this.$alertify.error(error.response.data)
-                    }
-
-                    this.password = '';
-                    this.usuario = '';
-
-                });
-        },
+          if(error.response.status == 500 || error.response.status == 404 ){
+            this.$alertify.error('Han surgido problemas para conectarse con el servidor. Inténtelo más tarde.')
+          }else{
+            this.$alertify.error(error.response.data)
+          }
+         
+          this.password = '';
+          this.usuario = '';
+         
+        });
     },
+  },
 };
 </script>
 

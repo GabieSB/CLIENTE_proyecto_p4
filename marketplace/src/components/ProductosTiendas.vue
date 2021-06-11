@@ -69,7 +69,7 @@ export default {
         },
         getCategorias() {
             axios
-                .get(process.env.VUE_APP_API_URL + "get_categorias/1")
+                .get(process.env.VUE_APP_API_URL + "get_categorias2/1")
                 .then((response) => {
                     var aux = [];
                     aux[0] = {

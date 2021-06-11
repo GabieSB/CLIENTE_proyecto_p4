@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Dashboard from '../views/DashboardTienda.vue'
 import ProductosCRUD from '../views/ProductosCRUD.vue'
-import Dashboard from '../views/DashboardTienda.vue';
 
 Vue.use(VueRouter);
 
