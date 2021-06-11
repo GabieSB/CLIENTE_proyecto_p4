@@ -77,10 +77,11 @@ export default {
 
     insertData(formData) {
       axios
-        .post(
-          process.env.VUE_APP_API_URL + "/create_usuario",
-          JSON.stringify(formData)
-        )
+        .post(process.env.VUE_APP_API_URL + "/create_usuario", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((response) => {
           this.$router.push("/");
           this.$alertify.success(response.data);
@@ -92,26 +93,15 @@ export default {
     },
 
     saveData() {
-      let allData = this.buildUserData();
-      this.insertData(allData);
+      let form = new FormData();
+      form.append("string_data", JSON.stringify(this.buildUserData()));
+      form.append("file", this.fotoPerfil ? this.fotoPerfil : null);
+      this.insertData(form);
     },
 
     chargeProfilePic() {
-      let file = this.$refs.profilePic.files[0];
-      if(file){
-        let reader = new FileReader();
-
-        reader.onload = (evnt) =>{
-          this.fotoPerfil = evnt.target.result;
-        }
-
-        reader.readAsBinaryString(file);
-        
-      }else{
-        this.fotoPerfil = undefined;
-      }
+      this.fotoPerfil = this.$refs.profilePic.files[0];
     },
-    
   },
 };
 </script>

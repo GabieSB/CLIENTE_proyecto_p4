@@ -44,7 +44,13 @@
           src="https://xn--diseoscreativos-1qb.com/wp-content/uploads/2018/06/Imagenes-de-gatos-www.dise%C3%B1oscreativos.com-portada-3-1.jpg"
           alt="foto de perfil"
         />
-        <input id="picSelector" type="file" accept=".png, .jpg, .jpge" v-on:change="chargeProfilePic"/>
+        <input
+          id="picSelector"
+          type="file"
+          accept=".png, .jpg, .jpge"
+          v-on:change="chargeProfilePic"
+          ref="profilePic"
+        />
       </div>
     </form>
   </div>
@@ -64,7 +70,7 @@ export default {
     codigoPostal: "",
     casillero: "",
     observaciones: "",
-    fotoPerfil: null,
+    fotoPerfil: undefined,
   }),
 
   methods: {
@@ -94,14 +100,15 @@ export default {
 
     insertData(formData) {
       axios
-        .post(
-          process.env.VUE_APP_API_URL + "/create_usuario",
-          JSON.stringify(formData)
-        )
+        .post(process.env.VUE_APP_API_URL + "/create_usuario", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((response) => {
           this.$router.push("/");
           this.$alertify.success(response.data);
-          main.AppContext['userData'] = undefined;           //Se limpia entrada de datos "userData" del AppContext
+          main.AppContext["userData"] = undefined; //Se limpia entrada de datos "userData" del AppContext
         })
         .catch((error) => {
           this.proccessAxiosError(error);
@@ -109,13 +116,15 @@ export default {
     },
 
     saveData() {
-      let allData = this.buildUserData();
-      this.insertData(allData);
+      let form = new FormData();
+      form.append("string_data", JSON.stringify(this.buildUserData()));
+      form.append("file", this.fotoPerfil ? this.fotoPerfil : null);
+      this.insertData(form);
     },
 
-    chargeProfilePic(){
-
-    }
+    chargeProfilePic() {
+      this.fotoPerfil = this.$refs.profilePic.files[0];
+    },
   },
 };
 </script>
