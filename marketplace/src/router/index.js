@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Dashboard from '../views/DashboardTienda.vue'
 import ProductosCRUD from '../views/ProductosCRUD.vue'
-
+import Dashboard from '../views/DashboardTienda.vue';
 
 Vue.use(VueRouter);
 
@@ -39,8 +39,18 @@ const routes = [
     name: 'ProductosCRUD', 
 
     component: () => import(/* webpackChunkName: "ProductosCRUD" */ '../views/ProductosCRUD.vue')
-  }
- 
+  },
+  {
+    path: '/tiendas',
+    name: 'Tiendas', 
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/Tiendas.vue')
+  },
+  {
+    path: '/productosDescripcion',
+    name:'ProductosDescripcion',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/ProductosDescripcion.vue')
+
+  },
   
 ];
 
