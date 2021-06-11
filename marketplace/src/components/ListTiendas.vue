@@ -44,8 +44,6 @@ export default {
             axios.get(process.env.VUE_APP_API_URL + 'get_tiendas/')
                 .then((respose) => {
                     this.tiendas = respose.data;
-                    console.log(this.tiendas[0]);
-                    console.log(this.tiendas[1].tienda_descripcion);
                 })
 
         }

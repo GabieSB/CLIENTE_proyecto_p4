@@ -38,7 +38,13 @@ const routes = [
     path: '/tiendas',
     name: 'Tiendas', 
     component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/Tiendas.vue')
-  }
+  },
+  {
+    path: '/productosDescripcion',
+    name:'ProductosDescripcion',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/ProductosDescripcion.vue')
+
+  },
   
 ];
 

@@ -6,7 +6,7 @@
     </div>
 
     <div class="contenedor_productos" v-for="producto in productos" :key="producto.producto_id">
-        <b-card id="card" v-bind:title="producto.nombre" v-bind:img-src="producto.foto" img-alt="Image" img-height="350" img-top tag="article" style="max-width: 20rem" class="mb-2">
+        <b-card id="card" @click="irDescripcioProducto()" v-bind:title="producto.nombre" v-bind:img-src="producto.foto" img-alt="Image" img-height="350" img-top tag="article" style="max-width: 20rem" class="mb-2">
             <b-card-text> Monto:{{producto.precio}} </b-card-text>
                 <div>
                     <b-form-checkbox v-model="checked" v:name="check-button" switch>
@@ -33,6 +33,10 @@ export default {
         this.getCategorias();
     },
     methods: {
+        irDescripcioProducto() {
+            this.$router.push("ProductosDescripcion");
+        }
+        ,
         buscarProductos() {
             var buscar = document.getElementById("buscar").value;
             var selectionarCategoria = document.getElementById("selectCategoria").value;
