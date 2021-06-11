@@ -31,7 +31,9 @@
           placeholder="Password"
           v-model="password"
           required        />
-        <input type="submit" class="fadeIn fourth" value="Log In" />
+
+          <input type="submit" value="Login">
+        
       </form>
 
       <!-- Remind Passowrd -->
@@ -70,9 +72,11 @@ export default {
       axios
         .get(process.env.VUE_APP_API_URL+ "login/" + this.usuario + "/" + this.password )
         .then((data) => {
-          console.log(data);
+        
           if (data.statusText == "OK") {
-            localStorage.user = data.data; //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
+            localStorage.setItem('tienda_id', data.data.tienda_id)  //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
+            this.$store.state.usuario = data.data;
+            console.log(this.$store.state.usuario)
             if(data.data.usuario_tipo == 'C'){
                this.$router.push("dashboardComprador");
             }else{
