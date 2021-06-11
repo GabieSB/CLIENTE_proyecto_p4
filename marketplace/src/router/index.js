@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Dashboard from '../views/DashboardTienda.vue'
+import ProductosCRUD from '../views/ProductosCRUD.vue'
 
 
 Vue.use(VueRouter);
@@ -25,15 +26,19 @@ const routes = [
     path: '/dashboardTienda',
     name: 'DashboardTienda', 
 
-
     component: () => import(/* webpackChunkName: "DashboardTienda" */ '../views/DashboardTienda.vue')
   },
   {
     path: '/dashboardComprador',
     name: 'DashboardComprador', 
 
-
     component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/DashboardComprador.vue')
+  },
+  {
+    path: '/productosCRUD',
+    name: 'ProductosCRUD', 
+
+    component: () => import(/* webpackChunkName: "ProductosCRUD" */ '../views/ProductosCRUD.vue')
   }
  
   
