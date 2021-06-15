@@ -50,6 +50,31 @@ const routes = [
     component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/ProductosDescripcion.vue')
 
   },
+  {
+    path: '/crudUsuario',
+    name: 'CrudUsuario',
+    props:true,
+
+
+    component: () => import('../views/CrudUsuario.vue')
+  },
+  {
+    path: '/crudTienda',
+    name: 'CrudTienda',
+    props:true,
+
+
+    component: () => import('../views/CrudTienda.vue')
+  },
+  {
+    path: '/crudComprador',
+    name: 'CrudComprador',
+    props:true,
+
+
+    component: () => import('../views/CrudComprador.vue')
+  }
+ 
   
 ];
 

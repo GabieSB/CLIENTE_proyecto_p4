@@ -29,8 +29,12 @@ Vue.use(VueFormulate)
 
 
 Vue.config.productionTip = false;
-new Vue({
+
+export const main = new Vue({
   router,
+  data: {
+    AppContext: {}
+  },
   render: (h) => h(App),
   store,
 }).$mount("#app");
