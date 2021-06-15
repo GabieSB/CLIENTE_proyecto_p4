@@ -2,7 +2,7 @@
   <div>
     <Header></Header>
     <div class="container-fluid px-5 mt-1 d-flex flex-column">
-      <div class="row"><h1 class="my-3">Agregar Producto</h1></div>
+      <div class="row"><h1 class="my-3">{{mensaje}}</h1></div>
 
       <div class="row border-top">
         <b-form v-on:submit.prevent="onSubmit">
@@ -182,11 +182,13 @@ import axios from "axios";
 
 
 export default {
+  name: "productosCRUD",
   components: {
     Header,
     Carousel,
   },
   data: () => ({
+    mensaje: "Agregar Producto",
     form: {
       id: "",
       nombre: "",
@@ -210,10 +212,28 @@ export default {
   mounted() {
     this.getCategorias();
     this.getDataTienda();
+    this.verificarEdicion();
+    
+   
       
   },
 
   methods: {
+    verificarEdicion(){
+        if(localStorage.getItem('id_producto_edit') != null){
+          this.mensaje = "Editar prodcuto"
+          this.getDataProducto();
+        }
+    },
+    getDataProducto(){
+      var url = process.env.VUE_APP_API_URL + "get_product_by_id/" + localStorage.getItem('id_producto_edit');
+      axios
+        .get(url)
+        .then((response) => {
+          console.log(response.data)
+        })
+        .catch((error) => {});
+    }, 
     getCategorias() {
       var url = process.env.VUE_APP_API_URL + "get_categorias";
       axios

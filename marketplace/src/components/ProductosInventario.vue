@@ -76,7 +76,7 @@
 
         <div class="actions">
           <b-button class="mx-2 btn-actions" @click="eliminarProducto(producto.producto_id)" variant="outline-danger">Eliminar</b-button>
-          <b-button class="mx-2 btn-actions" variant="outline-warning">Editar</b-button>
+          <b-button class="mx-2 btn-actions" @click="editarProducto(producto.producto_id)"  variant="outline-warning">Editar</b-button>
         </div>
       </b-card>
     </div>
@@ -200,7 +200,12 @@ export default {
           console.log(error);
         });
 
-    }
+    },
+    editarProducto(id){
+      localStorage.setItem('id_producto_edit', id)
+       this.$router.push("productosCRUD")
+
+    },
   },
 };
 </script>
