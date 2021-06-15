@@ -199,6 +199,7 @@ export default {
       pais: "",
       provincia: "",
       canton: "",
+      
     },
 
     preview_list: [],
@@ -208,7 +209,8 @@ export default {
   }),
   mounted() {
     this.getCategorias();
-      console.log(this.$store.state.usuario.tienda_id)
+    this.getDataTienda();
+      
   },
 
   methods: {
@@ -223,12 +225,8 @@ export default {
         .catch((error) => {});
     },
     onSubmit(event) {
-      //this.form.id = this.$store.state.usuario.tienda_id;
+      this.form.id = this.$store.state.tienda.tienda_id
 
-      this.form.id = localStorage.getItem('tienda_id')
-
-    
-      
       let param = new FormData();
 
       param.append("dataProducto", JSON.stringify(this.form));
@@ -273,6 +271,30 @@ export default {
     deleteImagePreview(index) {
       this.preview_list.splice(index, 1);
       this.image_list.splice(index, 1);
+    },
+
+    getDataTienda() {
+      const id_user = localStorage.getItem("id_user");
+      axios
+        .get(process.env.VUE_APP_API_URL + "getTiendaByUserId/" + id_user)
+        .then((response) => {
+          if (response.statusText == "OK") {
+           
+            this.$store.state.tienda =  response.data
+            console.log(
+              "Se ha obtenido los datos de la tienda"
+            );
+          }
+        })
+        .catch((error) => {
+          if (error.response.status == 500 || error.response.status == 404) {
+            this.$alertify.error(
+              "Han surgido problemas para conectarse con el servidor. Inténtelo más tarde."
+            );
+          } else {
+            this.$alertify.error(error.response.data);
+          }
+        });
     },
   },
 };

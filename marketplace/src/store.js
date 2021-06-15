@@ -9,7 +9,8 @@ export default new Vuex.Store({
 
   state: {
     msje: "Hola",
-    usuario: null
+    usuario: null,
+    tienda: null,
   },
   plugins: [createPersistedState()],
   mutations: {

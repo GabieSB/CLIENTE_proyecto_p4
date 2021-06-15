@@ -50,6 +50,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/ProductosDescripcion.vue')
 
   },
+  {
+    path: '/inventarioProductos',
+    name:'InventarioProductos',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/InventarioProductos.vue')
+
+  },
   
 ];
 
