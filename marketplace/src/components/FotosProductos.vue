@@ -45,15 +45,17 @@
                             <template>
                                 <div>
                                     <h4>Calificar:</h4>
-                                    <b-form-rating id="rating-inline" inline value="4" variant="warning"></b-form-rating>
+                                    <b-form-rating id="rating-inline" v-model="value" variant="warning"></b-form-rating>
+                                     <p class="mt-2">Value: {{ value }}</p>
+                                   
                                 </div>
                             </template>
                         </b-card-text>
                         <div id="contendor_botones">
-                            <b-button squared variant="primary">Comentar</b-button><br>
+                            <b-button squared variant="primary" @click=" irPregunta()">Comentar</b-button><br>
                             <b-button squared>Agregar al Carrito</b-button>
                             <br>
-                            <b-button squared variant="primary">Comprar ahora</b-button>
+                            <b-button squared variant="primary" @click="irCompra()" >Comprar ahora</b-button>
                         </div>
                     </b-card>
                 </b-col>
@@ -73,6 +75,7 @@ export default {
     data: () => ({
         productoSelecionado: [],
         imagensProd: [],
+        value:0,
 
     }),
     mounted() {
@@ -81,6 +84,16 @@ export default {
 
     },
     methods: {
+        irCompra(){
+             this.$router.push("CompraCrud");
+        },
+        irPregunta(){
+             this.$router.push("PreguntaCrud");
+        },
+        getEstrellas(){
+            alert("s");
+         //   console.log(this.value+"dd");
+        },
         getFotos() {
             var a = localStorage.getItem('id_producto');
             axios.get(process.env.VUE_APP_API_URL + 'get_fotosProductos/' + a)
@@ -93,7 +106,7 @@ export default {
         },
         getProductoSeleccionado() {
             var a = localStorage.getItem('id_producto');
-            axios.get(process.env.VUE_APP_API_URL + 'get_productoSelecionado/' + a)
+            axios.get(process.env.VUE_APP_API_URL + 'get_productoSelecionado/'+a)
                 .then((respose) => {
                     this.productoSelecionado = respose.data;
                     console.log(this.productoSelecionado);
@@ -113,16 +126,7 @@ export default {
     background: darkblue;
 }
 
-/*
-#contenedor_productos {
-    float: left;
-    padding-left: 80px;
-    padding-top: 15px;
-}
 
-#galeria {
-   padding-left: 100px;
-}*/
 
 #fProducto {
     padding-top: 10px;

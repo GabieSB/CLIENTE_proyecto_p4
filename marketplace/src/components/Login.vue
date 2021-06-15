@@ -74,8 +74,12 @@ export default {
             this.$store.state.usuario = data.data;
             console.log(this.$store.state.usuario)
             if(data.data.usuario_tipo == 'C'){
+                localStorage.setItem('usuario_id',data.data.usuario_id);
+                console.log(localStorage.getItem('usuario_id'));
                this.$router.push("dashboardComprador");
             }else{
+                
+            
               this.$router.push("dashboardTienda");
             }
           }
