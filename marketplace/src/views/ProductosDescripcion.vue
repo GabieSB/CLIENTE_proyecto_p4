@@ -2,7 +2,7 @@
 <div>
 <Header></Header>
 <SidebarComponent></SidebarComponent>
-<h1>Hola</h1>
+<FotosProductos></FotosProductos>
 </div>
 </template>
 
@@ -10,11 +10,14 @@
 // @ is an alias to /src
 import Header from "@/components/Header.vue"
 import SidebarComponent from "@/components/SidebarComponent.vue"
+import FotosProductos from "@/components/FotosProductos.vue"
 export default {
   name: "Tiendas",
   components: {
     Header,
     SidebarComponent,
+    FotosProductos
+
   }
 
 };

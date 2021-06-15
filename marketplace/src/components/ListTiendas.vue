@@ -10,9 +10,10 @@
                 <b-card-text>
                     {{tienda.pais}} {{tienda.provincia}} {{tienda.canton}}
                 </b-card-text>
-                  <b-button variant="primary" @click="irTienda()">ir</b-button>
+                  <b-button variant="primary" @click="irTienda(tienda.tienda_id)">ir</b-button>
                 
             </b-card>
+            
         </div>
     </div>
 </div>
@@ -36,7 +37,9 @@ export default {
         this.getTiendas();
     },
     methods: {
-        irTienda() {
+        irTienda(id) {
+           // this.$store.state.tienda=id;
+            localStorage.setItem('id_tienda',id);
             this.$router.push("Tiendas");
 
         },
