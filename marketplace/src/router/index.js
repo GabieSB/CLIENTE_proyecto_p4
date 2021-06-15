@@ -73,8 +73,14 @@ const routes = [
 
 
     component: () => import('../views/CrudComprador.vue')
-  }
+  },
  
+  {
+    path: '/inventarioProductos',
+    name:'InventarioProductos',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/InventarioProductos.vue')
+
+  },
   
 ];
 

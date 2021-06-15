@@ -2,7 +2,7 @@
   <div>
     <Header></Header>
     <div class="container-fluid px-5 mt-1 d-flex flex-column">
-      <div class="row"><h1 class="my-3">Agregar Producto</h1></div>
+      <div class="row"><h1 class="my-3">{{mensaje}}</h1></div>
 
       <div class="row border-top">
         <b-form v-on:submit.prevent="onSubmit">
@@ -182,11 +182,13 @@ import axios from "axios";
 
 
 export default {
+  name: "productosCRUD",
   components: {
     Header,
     Carousel,
   },
   data: () => ({
+    mensaje: "Agregar Producto",
     form: {
       id: "",
       nombre: "",
@@ -199,6 +201,7 @@ export default {
       pais: "",
       provincia: "",
       canton: "",
+      
     },
 
     preview_list: [],
@@ -208,10 +211,29 @@ export default {
   }),
   mounted() {
     this.getCategorias();
-      console.log(this.$store.state.usuario.tienda_id)
+    this.getDataTienda();
+    this.verificarEdicion();
+    
+   
+      
   },
 
   methods: {
+    verificarEdicion(){
+        if(localStorage.getItem('id_producto_edit') != null){
+          this.mensaje = "Editar prodcuto"
+          this.getDataProducto();
+        }
+    },
+    getDataProducto(){
+      var url = process.env.VUE_APP_API_URL + "get_product_by_id/" + localStorage.getItem('id_producto_edit');
+      axios
+        .get(url)
+        .then((response) => {
+          console.log(response.data)
+        })
+        .catch((error) => {});
+    }, 
     getCategorias() {
       var url = process.env.VUE_APP_API_URL + "get_categorias";
       axios
@@ -223,12 +245,8 @@ export default {
         .catch((error) => {});
     },
     onSubmit(event) {
-      //this.form.id = this.$store.state.usuario.tienda_id;
+      this.form.id = this.$store.state.tienda.tienda_id
 
-      this.form.id = localStorage.getItem('tienda_id')
-
-    
-      
       let param = new FormData();
 
       param.append("dataProducto", JSON.stringify(this.form));
@@ -273,6 +291,30 @@ export default {
     deleteImagePreview(index) {
       this.preview_list.splice(index, 1);
       this.image_list.splice(index, 1);
+    },
+
+    getDataTienda() {
+      const id_user = localStorage.getItem("id_user");
+      axios
+        .get(process.env.VUE_APP_API_URL + "getTiendaByUserId/" + id_user)
+        .then((response) => {
+          if (response.statusText == "OK") {
+           
+            this.$store.state.tienda =  response.data
+            console.log(
+              "Se ha obtenido los datos de la tienda"
+            );
+          }
+        })
+        .catch((error) => {
+          if (error.response.status == 500 || error.response.status == 404) {
+            this.$alertify.error(
+              "Han surgido problemas para conectarse con el servidor. Inténtelo más tarde."
+            );
+          } else {
+            this.$alertify.error(error.response.data);
+          }
+        });
     },
   },
 };

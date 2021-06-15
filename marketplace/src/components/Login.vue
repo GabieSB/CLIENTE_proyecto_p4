@@ -72,7 +72,7 @@ export default {
         .then((data) => {
         
           if (data.statusText == "OK") {
-          //  localStorage.setItem('tienda_id', data.data.tienda_id)  //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
+            localStorage.setItem('id_user', data.data.usuario_id)  //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
             this.$store.state.usuario = data.data;
             console.log(this.$store.state.usuario)
             if(data.data.usuario_tipo == 'C'){
