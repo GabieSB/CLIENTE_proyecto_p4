@@ -6,7 +6,7 @@
     </div>
 
     <div class="contenedor_productos" v-for="producto in productos" :key="producto.producto_id">
-        <b-card id="card" @click="irDescripcioProducto(producto.producto_id)" v-bind:title="producto.nombre" v-bind:img-src="producto.foto" img-alt="Image" img-height="350" img-top tag="article" style="max-width: 20rem" class="mb-2">
+        <b-card id="card" @click="irDescripcioProducto(producto.producto_id)" v-bind:title="producto.nombre" v-bind:img-src="producto.fotoSRC" img-alt="Image" img-height="250" img-width="250" img-top tag="article" style="max-width: 20rem" class="mb-2">
             <b-card-text> Monto:{{producto.precio}} </b-card-text>
             <template>
                 <div>
@@ -14,7 +14,7 @@
                     <p class="mt-2">Value:{{value}}</p>
                 </div>
             </template>
-         
+
         </b-card>
     </div>
 </div>
@@ -37,15 +37,15 @@ export default {
 
     },
     methods: {
-      
+
         irDescripcioProducto(idProducto) {
             //this.$store.state.producto = idProducto;
-            localStorage.setItem("id_producto",idProducto);
+            localStorage.setItem("id_producto", idProducto);
             this.$router.push("ProductosDescripcion");
         },
         buscarProductos() {
-          //  var aux = this.$store.getters.tiendaSelecionada;
-            var aux= localStorage.getItem('id_tienda');
+            //  var aux = this.$store.getters.tiendaSelecionada;
+            var aux = localStorage.getItem('id_tienda');
             var buscar = document.getElementById("buscar").value;
             var selectionarCategoria = document.getElementById("selectCategoria").value;
             var ur = ""
@@ -68,7 +68,7 @@ export default {
 
         },
         getProductos() {
-          var aux= localStorage.getItem('id_tienda');
+            var aux = localStorage.getItem('id_tienda');
             console.log("Hola" + aux);
             axios
                 .get(process.env.VUE_APP_API_URL + "get_productosTiendas/" + aux)
@@ -76,7 +76,16 @@ export default {
                     console.log(this.$store.state.tienda);
                     this.productos = respose.data;
                     console.log(this.productos);
+                    this.getPhotoPreview();
                 });
+        },
+        getPhotoPreview() {
+            for (var i = 0; i < this.productos.length; i++) {
+                if (this.productos[i].foto.length > 0) {
+                    this.productos[i].fotoSRC =
+                        process.env.VUE_APP_API_URL + "get_foto/" + this.productos[i].foto;
+                }
+            }
         },
         getCategorias() {
             axios
