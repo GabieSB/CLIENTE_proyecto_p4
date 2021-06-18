@@ -135,31 +135,6 @@ export default {
                 })
         },
         setEditarCalificacion() {
-           // alert('sss');
-        ///    this.form.id = this.$store.state.tienda.tienda_id
-           /* let param = new FormData();
-
-            param.append("dataCalificacion", this.value);
-            param.append("dataComprador",localStorage.getItem('comprador_id'));
-            param.append("dataProducto",localStorage.getItem('id_producto'));
-            axios
-                .post(process.env.VUE_APP_API_URL + "calificar_producto", param, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                })
-                .then((data) => {
-                    console.log(data)
-                    this.$alertify.success(data.data)
-                })
-                .catch((error) => {
-                    console.log(error)
-                    this.$alertify.error(error.data)
-
-                });*/
-            //    var jso=JSON.stringify([{'idUsuario':localStorage.getItem('comprador_id')},
-               // {'idCliente':localStorage.getItem('id_producto')},
-                //{'calificacion':this.value}]);
                 var objeto=new Object();
                 objeto.idComprador=localStorage.getItem('comprador_id');
                 objeto.idProducto=localStorage.getItem('id_producto')
