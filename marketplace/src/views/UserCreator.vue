@@ -1,18 +1,17 @@
 <template>
-    <UserEditor></UserEditor>
-    
+    <UserCreatorComponent></UserCreatorComponent>
 </template>
 
 
 <script>
 // @ is an alias to /src
-    import UserEditor from '@/components/UserEditor.vue'
+    import UserCreatorComponent from '@/components/UserCreatorComponent.vue'
 
     export default {
-        name: "CrudUsuarios",
+        name: "UserCreatorComponet",
         props: ['items'],
         components: {
-            UserEditor,
+            UserCreatorComponent,
         },
         data: () => ({
      

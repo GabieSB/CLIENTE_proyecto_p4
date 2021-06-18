@@ -7,7 +7,9 @@
         <div class="p-3">
           
           <div class="d">
-            <b-avatar src="https://placekitten.com/300/300" size="6rem"></b-avatar>
+            <b-avatar ref="profPic" size="6rem"></b-avatar>
+            <label ref="username" id="username"></label>
+            <b-button title="Editar mi perfil de usuario">✏️</b-button>
             <h4 id="sidebar-no-header-title">Menú</h4>
             <div class="divider-menu"></div>
           </div>
@@ -27,9 +29,55 @@
 </template>
 
 <script>
+import axios from "axios";
  export default
  {
    name:'SidebarComponent',
+
+  data: () => ({
+    userData: undefined,
+  }),
+
+   mounted() {
+    this.deployPrechagedData();
+  },
+  methods:{
+
+    deployPrechagedData(){
+      let userId = localStorage.getItem("id_user");
+      this.userData = this.getAllUserData(userId);
+     
+    },
+
+    proccessAxiosError(error) {
+      if (error.response) {
+        if (error.response.status == 500 || error.response.status == 404) {
+          this.$alertify.error(
+            "Han surgido problemas para conectarse con el servidor. Inténtelo más tarde."
+          );
+        } else {
+          this.$alertify.error(error.response.data);
+        }
+      } else {
+        this.$alertify.error(
+          "No se ha podido establecer conexión con el servidor."
+        );
+      }
+    },
+
+    getAllUserData(id){
+      axios.get(process.env.VUE_APP_API_URL+ "get_userdata_by_id/" + id )
+      .then((response) => {
+          this.userData = response.data;
+          this.$refs.username.innerHTML = '@ ' + this.userData['usuario_nom_usr'];
+          this.$refs.profPic.src = process.env.VUE_APP_API_URL +  '/get_foto/profiles/' 
+          + this.userData['usuario_foto'];
+        })
+        .catch((error) => {
+          this.proccessAxiosError(error);
+        });
+    },
+  }
  }
 </script>
 
@@ -45,6 +93,11 @@
 .divider-menu{
   border:1px solid #fff;
   width: 100;
+}
+
+#username{
+  padding-left: 5px;
+  margin-right: 5px;
 }
 </style>
 

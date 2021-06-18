@@ -102,8 +102,8 @@ export default {
         });
     },
     goToRegistration(){
-      main.AppContext['userData'] = undefined;
-      this.$router.push("crudUsuario");
+      localStorage.removeItem('userData');
+      this.$router.push("userCreator");
     },
   },
 };

@@ -1,6 +1,7 @@
 <template>
   <div>
     <Header></Header>
+    <SidebarComponent></SidebarComponent>
 
     <div class="container-fluid">
       <div class="row">
@@ -38,12 +39,14 @@
 </template>
 <script>
 import Header from "@/components/Header.vue";
+import SidebarComponent from "@/components/SidebarComponent.vue";
 
 import axios from "axios";
 export default {
   name: "Dashboard",
   components: {
     Header,
+    SidebarComponent,
   },
   data: () => ({
     nombreTienda: "",

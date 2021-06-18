@@ -51,28 +51,28 @@ const routes = [
 
   },
   {
-    path: '/crudUsuario',
-    name: 'CrudUsuario',
+    path: '/userCreator',
+    name: 'UserCreator',
     props:true,
 
 
-    component: () => import('../views/CrudUsuario.vue')
+    component: () => import('../views/UserCreator.vue')
   },
   {
-    path: '/crudTienda',
-    name: 'CrudTienda',
+    path: '/tiendaCreator',
+    name: 'TiendaCreator',
     props:true,
 
 
-    component: () => import('../views/CrudTienda.vue')
+    component: () => import('../views/TiendaCreator.vue')
   },
   {
-    path: '/crudComprador',
-    name: 'CrudComprador',
+    path: '/compradorCreator',
+    name: 'CompradorCreator',
     props:true,
 
 
-    component: () => import('../views/CrudComprador.vue')
+    component: () => import('../views/CompradorCreator.vue')
   },
  
   {
