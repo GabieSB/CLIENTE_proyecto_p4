@@ -1,19 +1,27 @@
 <template>
   <div>
-    
-    <b-sidebar id="sidebar-no-header" aria-labelledby="sidebar-no-header-title" 
-    no-header shadow bg-variant="dark" text-variant="light" backdrop backdrop-variant="dark">
+    <b-sidebar
+      id="sidebar-no-header"
+      aria-labelledby="sidebar-no-header-title"
+      no-header
+      shadow
+      bg-variant="dark"
+      text-variant="light"
+      backdrop
+      backdrop-variant="dark"
+    >
       <template #default="{ hide }">
         <div class="p-3">
-          
           <div class="d">
             <b-avatar ref="profPic" size="6rem"></b-avatar>
             <label ref="username" id="username"></label>
-            <b-button title="Editar mi perfil de usuario">✏️</b-button>
+            <b-button title="Editar mi perfil de usuario" @click="editProfile()"
+              >✏️</b-button
+            >
             <h4 id="sidebar-no-header-title">Menú</h4>
             <div class="divider-menu"></div>
           </div>
-        
+
           <nav class="mb-3">
             <b-nav vertical>
               <b-nav-item active @click="hide">Active</b-nav-item>
@@ -21,7 +29,9 @@
               <b-nav-item href="#link-2" @click="hide">Another Link</b-nav-item>
             </b-nav>
           </nav>
-          <b-button variant="primary" block @click="hide">Close Sidebar</b-button>
+          <b-button variant="primary" block @click="hide"
+            >Close Sidebar</b-button
+          >
         </div>
       </template>
     </b-sidebar>
@@ -30,23 +40,20 @@
 
 <script>
 import axios from "axios";
- export default
- {
-   name:'SidebarComponent',
+export default {
+  name: "SidebarComponent",
 
   data: () => ({
     userData: undefined,
   }),
 
-   mounted() {
+  mounted() {
     this.deployPrechagedData();
   },
-  methods:{
-
-    deployPrechagedData(){
+  methods: {
+    deployPrechagedData() {
       let userId = localStorage.getItem("id_user");
       this.userData = this.getAllUserData(userId);
-     
     },
 
     proccessAxiosError(error) {
@@ -65,37 +72,44 @@ import axios from "axios";
       }
     },
 
-    getAllUserData(id){
-      axios.get(process.env.VUE_APP_API_URL+ "get_userdata_by_id/" + id )
-      .then((response) => {
+    getAllUserData(id) {
+      axios
+        .get(process.env.VUE_APP_API_URL + "get_userdata_by_id/" + id)
+        .then((response) => {
           this.userData = response.data;
-          this.$refs.username.innerHTML = '@ ' + this.userData['usuario_nom_usr'];
-          this.$refs.profPic.src = process.env.VUE_APP_API_URL +  '/get_foto/profiles/' 
-          + this.userData['usuario_foto'];
+          this.$refs.username.innerHTML =
+            "@ " + this.userData["usuario_nom_usr"];
+          this.$refs.profPic.src =
+            process.env.VUE_APP_API_URL +
+            "/get_foto/profiles/" +
+            this.userData["usuario_foto"];
         })
         .catch((error) => {
           this.proccessAxiosError(error);
         });
     },
-  }
- }
+
+    editProfile() {
+        localStorage.setItem('userId', this.userData['usuario_id']);
+        this.$router.push((this.userData['usuario_tipo'] == 'T') ? 'tiendaEditor' : '');
+    },
+  },
+};
 </script>
 
 <style>
-.nav-item > .nav-link
-{
-  color:#fff;
+.nav-item > .nav-link {
+  color: #fff;
 }
-.nav-item > .nav-link:hover
-{
-  color:#CCC;
+.nav-item > .nav-link:hover {
+  color: #ccc;
 }
-.divider-menu{
-  border:1px solid #fff;
+.divider-menu {
+  border: 1px solid #fff;
   width: 100;
 }
 
-#username{
+#username {
   padding-left: 5px;
   margin-right: 5px;
 }

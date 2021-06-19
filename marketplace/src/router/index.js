@@ -92,7 +92,12 @@ const routes = [
   name:'PreguntaCrud',
   component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/PreguntaCrud')
 
-}
+  },
+  {
+    path: '/tiendaEditor',
+    name:'TiendaEditor',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/TiendaEditor.vue')
+  }
   
 ];
 
