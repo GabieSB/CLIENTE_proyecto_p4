@@ -1,7 +1,7 @@
 <template>
-  <form class="container-fluid" v-on:submit.prevent="saveChanges">
+    <form class="container-fluid" v-on:submit.prevent="saveChanges">
     <h1 class="main-tittle">
-      Datos de tu tienda
+      Tus datos generales
       <div class="main-button-container">
         <b-button class="action-buttons" variant="success" type="submit">Guardar cambios</b-button>
         <b-button class="action-buttons" @click="exit()">Cancelar</b-button>
@@ -12,7 +12,7 @@
       <div class="col-sm-7" style="background-color: #f5f5f5">
         <div>
           <label class="inputLabel" for="cedula"
-            >Cédula juridica</label
+            >Número de cédula</label
           >
         </div>
         <input
@@ -27,7 +27,7 @@
 
         <div>
           <label class="inputLabel" for="nombreCompleto"
-            >Nombre de tu tienda</label
+            >Nombre comleto</label
           >
         </div>
         <input
@@ -95,48 +95,8 @@
           maxlength="24"
         />
       </div>
+      
       <div class="col-sm-5" style="background-color: #f5f5f5">
-        <div class="col-sm-12 sub-group">
-          <h4>Datos de dirección</h4>
-          <input
-            maxlength="32"
-            id="pais"
-            type="text"
-            placeholder="País"
-            required
-            v-model="pais"
-          />
-          <input
-            maxlength="32"
-            id="provincia"
-            type="text"
-            placeholder="Provincia"
-            required
-            v-model="provincia"
-          />
-          <input
-            maxlength="32"
-            id="canton"
-            type="text"
-            placeholder="Cantón"
-            required
-            v-model="canton"
-          />
-        </div>
-
-        <div>
-          <label class="inputLabel" for="descripcion"
-            >Detalles sobre tu tienda</label
-          >
-        </div>
-        <textarea
-          name="descripcion"
-          id="descripcion"
-          cols="67"
-          rows="3"
-          placeholder="Escribe aquí los detalles sobre tu tienda"
-          v-model="detalles"
-        ></textarea>
         <div class="sub-group">
           <h4>Foto de perfil</h4>
           <img class="profile-pic" ref="profPic" alt="foto de perfil" />
@@ -155,38 +115,33 @@
 
 <script>
 import axios from "axios";
+import { main } from "../main.js";
 
 export default {
   setup() {},
 
-  name: "UserEditorComponent",
+  name: "CompradorEditorComponent",
+
+  mounted() {
+    this.getEditionData(localStorage.getItem("userId"));
+  },
 
   data: () => ({
     usuario_id: "",
-    tienda_id: "",
-    direccion_id: "",
     usuario: "",
     password: "",
     nombreCompleto: "",
     cedula: "",
     email: "",
     telefono: "",
-    pais: "",
-    provincia: "",
-    canton: "",
-    detalles: "",
     nombreFoto: "",
     fotoPerfil: undefined,
   }),
 
-  mounted() {
-    this.getEditionData(localStorage.getItem("userId"));
-  },
-
   methods: {
     getEditionData(id) {
       axios
-        .get(process.env.VUE_APP_API_URL + "get_tienda_data_by_user_id/" + id)
+        .get(process.env.VUE_APP_API_URL + "get_userdata_by_id/" + id)
         .then((response) => {
           let userData = response.data;
           this.$refs.profPic.src =
@@ -202,19 +157,14 @@ export default {
 
     deployEditableData(responseData) {
       this.usuario_id = responseData['usuario_id'];
-      this.tienda_id = responseData['tienda_id'];
-      this.direccion_id = responseData['direccion_id'];
       this.email = responseData["usuario_email"];
       this.telefono = responseData["usuario_telefono"];
       this.cedula = responseData["usuario_cedula"];
       this.usuario = responseData["nombre_usuario"];
       this.nombreCompleto = responseData["usuario_nombre_compl"];
       this.tipoUsario = responseData["usuario_tipo"];
-      this.pais = responseData["direccion_pais"];
-      this.provincia = responseData["direccion_provincia"];
-      this.canton = responseData["direccion_canton"];
-      this.detalles = responseData["tienda_descripcion"];
       this.nombreFoto = responseData["usuario_foto"];
+      this.usuario = responseData["usuario_nom_usr"];
     },
 
     saveChanges() {
@@ -226,7 +176,7 @@ export default {
 
     updateData(formData) {
       axios
-        .put(process.env.VUE_APP_API_URL + "/edit_tienda", formData, {
+        .put(process.env.VUE_APP_API_URL + "/edit_comprador", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -255,28 +205,27 @@ export default {
         );
       }
     },
+
+    buildTiendaData() {
+      let chagPassw = this.$refs.passwCKB.checked;
+      return {
+        usuario_id: this.usuario_id, usuario_email: this.email,
+        usuario_telefono: this.telefono, usuario_cedula: this.cedula,
+        usuario_nom_usr: this.usuario, usuario_nombre_compl: this.nombreCompleto,
+        usuario_tipo: this.tipoUsario, usuario_foto: this.nombreFoto,
+        usuario_contrasenna: chagPassw ? this.$refs.passwordInput.value : null,
+      };
+    },
+
     chargeProfilePic() {
       this.fotoPerfil = this.$refs.profilePic.files[0];
     },
+
     changePasswState() {
       this.$refs.passwordInput.disabled = !this.$refs.passwCKB.checked;
       if (this.$refs.passwCKB.checked == true) {
         this.$refs.passwordInput.value = "";
       }
-    },
-
-    buildTiendaData() {
-      let chagPassw = this.$refs.passwCKB.checked;
-      return {
-        usuario_id: this.usuario_id, tienda_id: this.tienda_id,
-        direccion_id: this.direccion_id, usuario_email: this.email,
-        usuario_telefono: this.telefono, usuario_cedula: this.cedula,
-        usuario_nom_usr: this.usuario, usuario_nombre_compl: this.nombreCompleto,
-        usuario_tipo: this.tipoUsario, usuario_foto: this.nombreFoto,
-        direccion_pais: this.pais, direccion_provincia: this.provincia,
-        direccion_canton: this.canton, tienda_descripcion: this.detalles,
-        usuario_contrasenna: chagPassw ? this.$refs.passwordInput.value : null,
-      };
     },
 
     exit() {
@@ -286,20 +235,7 @@ export default {
   },
 };
 </script>
-
 <style scoped>
-input {
-  max-height: 50px;
-  border-bottom-color: #546e7a;
-  background: white;
-}
-
-textarea {
-  resize: none;
-  border-radius: 10px;
-  border: 1px solid grey;
-  border-bottom: 2px solid;
-}
 
 .container-fluid {
   padding-left: 50px;
@@ -343,6 +279,7 @@ input {
   padding-bottom: 10px;
   border-radius: 5px;
   background-color: #455a64;
+  transform: translateY(75%);
 }
 
 .profile-pic {

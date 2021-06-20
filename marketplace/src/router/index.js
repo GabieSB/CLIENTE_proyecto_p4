@@ -97,6 +97,11 @@ const routes = [
     path: '/tiendaEditor',
     name:'TiendaEditor',
     component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/TiendaEditor.vue')
+  },
+  {
+    path: '/compradorEditor',
+    name:'CompradorEditor',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/CompradorEditor.vue')
   }
   
 ];
