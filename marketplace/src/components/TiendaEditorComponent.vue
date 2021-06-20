@@ -1,15 +1,11 @@
 <template>
-  <form class="container-fluid">
+  <form class="container-fluid" v-on:submit.prevent="saveChanges">
     <h1 class="main-tittle">
       Datos de tu tienda
       <div class="main-button-container">
-        <b-button class="action-buttons" variant="success"
-          >Guardar cambios</b-button
-        >
+        <b-button class="action-buttons" variant="success" type="submit">Guardar cambios</b-button>
         <b-button class="action-buttons" @click="exit()">Cancelar</b-button>
-        <b-button class="action-buttons" variant="danger"
-          >Eliminar mi cuenta</b-button
-        >
+        <b-button class="action-buttons" variant="danger">Eliminar mi cuenta</b-button>
       </div>
     </h1>
     <div class="row" v-on:submit.prevent="saveData">
@@ -179,6 +175,7 @@ export default {
     provincia: "",
     canton: "",
     detalles: "",
+    nombreFoto: "",
     fotoPerfil: undefined,
   }),
 
@@ -204,7 +201,9 @@ export default {
     },
 
     deployEditableData(responseData) {
-      console.log("Usuario: " + responseData["usuario_nom_usr"]);
+      this.usuario_id = responseData['usuario_id'];
+      this.tienda_id = responseData['tienda_id'];
+      this.direccion_id = responseData['direccion_id'];
       this.email = responseData["usuario_email"];
       this.telefono = responseData["usuario_telefono"];
       this.cedula = responseData["usuario_cedula"];
@@ -215,6 +214,30 @@ export default {
       this.provincia = responseData["direccion_provincia"];
       this.canton = responseData["direccion_canton"];
       this.detalles = responseData["tienda_descripcion"];
+      this.nombreFoto = responseData["usuario_foto"];
+    },
+
+    saveChanges() {
+      let form = new FormData();
+      form.append("string_data", JSON.stringify(this.buildTiendaData()));
+      form.append("file", this.fotoPerfil ? this.fotoPerfil : null);
+      this.updateData(form);
+    },
+
+    updateData(formData) {
+      axios
+        .put(process.env.VUE_APP_API_URL + "/edit_tienda", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          this.exit();
+          this.$alertify.success(response.data);
+        })
+        .catch((error) => {
+          this.proccessAxiosError(error);
+        });
     },
 
     proccessAxiosError(error) {
@@ -238,11 +261,26 @@ export default {
     changePasswState() {
       this.$refs.passwordInput.disabled = !this.$refs.passwCKB.checked;
       if (this.$refs.passwCKB.checked == true) {
-        this.$refs.passwordInput.value = '';
+        this.$refs.passwordInput.value = "";
       }
     },
-    exit(){
-      localStorage.removeItem('userId');
+
+    buildTiendaData() {
+      let chagPassw = this.$refs.passwCKB.checked;
+      return {
+        usuario_id: this.usuario_id, tienda_id: this.tienda_id,
+        direccion_id: this.direccion_id, usuario_email: this.email,
+        usuario_telefono: this.telefono, usuario_cedula: this.cedula,
+        usuario_nom_usr: this.usuario, usuario_nombre_compl: this.nombreCompleto,
+        usuario_tipo: this.tipoUsario, usuario_foto: this.nombreFoto,
+        direccion_pais: this.pais, direccion_provincia: this.provincia,
+        direccion_canton: this.canton, tienda_descripcion: this.detalles,
+        usuario_contrasenna: chagPassw ? this.$refs.passwordInput.value : null,
+      };
+    },
+
+    exit() {
+      localStorage.removeItem("userId");
       this.$router.back();
     },
   },
@@ -295,7 +333,7 @@ input {
 
 .passwordInput:disabled {
   border-bottom: #8bc34a 2px solid;
-  background:#546e7a50;
+  background: #546e7a50;
 }
 
 .sub-group {
