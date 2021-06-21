@@ -13,7 +13,7 @@
           />
           Métodos de pago
         </b-button>
-        <b-button class="menu-btn">
+        <b-button class="menu-btn" @click="goTo('DireccionesEnvioAdmin')">
           <img
             src="https://img.icons8.com/dusk/64/000000/mailbox-opened-flag-down.png"
           />

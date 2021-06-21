@@ -112,6 +112,11 @@ const routes = [
     path: '/metodosPagoAdmin',
     name:'MetodosPagoAdmin',
     component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/MetodosPagoAdmin.vue')
+  },
+  {
+    path: '/direccionesEnvioAdmin',
+    name:'DireccionesEnvioAdmin',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/DireccionesEnvioAdmin.vue')
   }
   
 ];
