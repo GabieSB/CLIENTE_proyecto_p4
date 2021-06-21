@@ -5,13 +5,13 @@
         <b-form-input id="idMensaje" class="mb-2 mr-sm-2 mb-sm-0" placeholder="¿Pregunta?"></b-form-input>
         <b-button variant="primary" @click="enviarMensaje()">Enviar</b-button>
     </b-form>
-    
+
     <b-card id="contedor" bg-variant="primary" text-variant="dark" v-for="coment in comentarios" :key="coment.comentario_id">
         <b-row>
             <b-col align-self="start">
-                
-                <b-avatar  v-bind:src='coment.fotoSRC' size="6rem"></b-avatar>
-                 {{coment.usuario}}
+
+                <b-avatar v-bind:src='coment.fotoSRC' size="6rem"></b-avatar>
+                {{coment.usuario}}
                 <b-row>
                     <br>
                     {{coment.fechaFormater}}
@@ -20,7 +20,8 @@
             <b-col align-self="center">
                 <b-card id="comentario" text-variant="primary">{{coment.comentario}}</b-card>
             </b-col>
-            <b-col align-self="end">
+            {{cambiarRespuesta(coment.respuesta)}}
+            <b-col align-self="end" v-if="respuestMensaje">
                 <b-card id="comentario" text-variant="primary">
                     <div>{{coment.respuesta}}</div>
                 </b-card>
@@ -43,7 +44,8 @@ export default {
     name: "mensajesComponent",
     data: () => ({
         comentarios: [],
-        comprador: true
+        comprador: true,
+        respuestMensaje: true
     }),
     mounted() {
         this.getCometarios();
@@ -74,7 +76,7 @@ export default {
             var d = new Date();
             // alert(d);
             objeto.fecha = d;
-                        axios.post(process.env.VUE_APP_API_URL + "agregar_comentario", JSON.stringify(objeto))
+            axios.post(process.env.VUE_APP_API_URL + "agregar_comentario", JSON.stringify(objeto))
                 .then((respose) => {
                     this.getCometarios();
 
@@ -88,6 +90,13 @@ export default {
                 this.comprador = false;
             }
 
+        },
+        cambiarRespuesta(resp) {
+            if (resp != null) {
+                this.respuestMensaje = true;
+            } else {
+                this.respuestMensaje = false;
+            }
         },
         eliminarMensaje(idMensaje) {
             axios.delete(process.env.VUE_APP_API_URL + "eliminar_comentario/" +
@@ -103,7 +112,7 @@ export default {
                 if (this.comentarios[i].foto.length > 0) {
                     this.comentarios[i].fotoSRC =
                         process.env.VUE_APP_API_URL + "get_foto/profiles/" + this.comentarios[i].foto;
-                     
+
                 }
             }
         }

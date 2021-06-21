@@ -6,7 +6,7 @@
     </div>
 
     <div class="contenedor_productos" v-for="producto in productos" :key="producto.producto_id">
-        <b-card id="card" @click="irDescripcioProducto(producto.producto_id)" v-bind:title="producto.nombre" v-bind:img-src="producto.fotoSRC" img-alt="Image" img-height="250" img-width="250" img-top tag="article" style="max-width: 20rem" class="mb-2">
+        <!--b-card id="card" @click="irDescripcioProducto(producto.producto_id)" v-bind:title="producto.nombre" v-bind:img-src="producto.fotoSRC" img-alt="Image" img-height="250" img-width="250" img-top tag="article" style="max-width: 20rem" class="mb-2">
             <b-card-text> Monto:{{producto.precio}} </b-card-text>
             <template>
                 <div>
@@ -14,6 +14,39 @@
                     <p class="mt-2">Value:{{value}}</p>
                 </div>
             </template>
+
+        </b-card-->
+        <b-card id='card-producto' @click="irDescripcioProducto(producto.producto_id)" v-bind:img-src="producto.fotoSRC" v-model="producto.producto_id" img-alt="Image" img-top tag="article" class="card mb-2">
+            <h5 class="title">{{ producto.nombre }}</h5>
+            <p style="width: 200px" class="detalle-producto">
+                {{ producto.descripcion }}
+            </p>
+            <div class="data-producto my-1">
+                <b-card-text class="detalle-producto">
+                    Precio: ₡{{ producto.precio }}
+                </b-card-text>
+                <b-card-text class="detalle-producto">
+                    Stock: {{ producto.cantidad }} unid.
+                </b-card-text>
+                <b-card-text class="detalle-producto">
+                    Promedio de envío: {{ producto.prom_envio }}
+                </b-card-text>
+                <b-card-text class="detalle-producto">
+                    Costo envio: ₡{{ producto.cost_envio }}
+                </b-card-text>
+                <b-card-text v-if="producto.oferta > 0" class="detalle-producto">
+                    Precio oferta:{{ producto.oferta }}
+                </b-card-text>
+            </div>
+            <b-form-rating variant="warning" v-model="producto.calificacion" readonly></b-form-rating>
+
+            <p style="width: 200px" class="detalle-producto mt-1">
+                📍
+                {{
+            producto.pais + ", " + producto.provincia + ", " + producto.canton
+          }}
+            </p>
+            <small class="text-muted">Publicado: {{ producto.publicacion }}</small>
 
         </b-card>
     </div>
@@ -39,9 +72,11 @@ export default {
     methods: {
 
         irDescripcioProducto(idProducto) {
-            //this.$store.state.producto = idProducto;
             localStorage.setItem("id_producto", idProducto);
-            this.$router.push("ProductosDescripcion");
+            //this.$router.push(() => {});
+            // this.$router.push("ProductosDescripcion").catch(err=>{});
+            this.$router.push("ProductosDescripcion")
+
         },
         buscarProductos() {
             //  var aux = this.$store.getters.tiendaSelecionada;
@@ -64,6 +99,7 @@ export default {
                 .then((respose) => {
                     this.productos = respose.data;
                     console.log(this.productos);
+                    this.getPhotoPreview();
                 });
 
         },
@@ -117,28 +153,58 @@ export default {
 </script>
 
 <style>
-#divProductos {
-    text-align: center;
+#card-producto img {
+    height: 140px;
+    width: auto;
+    padding: 5px;
+    border-radius: 10px;
 }
 
-#divProductos.left {
-    float: left;
-    background: rgb(17, 17, 53);
+.card {
+    height: auto;
+    width: auto;
+    font-size: 14px;
+    background: rgb(255, 255, 255);
+    border: solid 2px rgb(205, 206, 206);
 }
 
-.cads-productos {
-    float: left;
-    padding-left: 80px;
-    padding-top: 15px;
+.data-producto {
+    background-color: rgb(57, 105, 131);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
 }
 
-#card:hover {
+.detalle-producto {
+    padding: 0;
+    margin: 0;
+}
+
+.card:hover {
     cursor: pointer;
+    background: rgb(238, 238, 238);
 }
 
 .contenedor_productos {
     float: left;
     padding-left: 80px;
     padding-top: 15px;
+}
+
+.btn-actions {
+    padding: 0 8px;
+}
+
+.actions {
+    margin: 5px;
+}
+
+.card-body {
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 </style>
