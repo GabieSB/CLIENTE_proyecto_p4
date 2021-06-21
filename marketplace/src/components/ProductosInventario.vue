@@ -11,7 +11,7 @@
           @change="buscarProductos()"
         ></b-form-select>
         <input
-         id= "buscar"
+          id="buscar"
           type="search"
           @keyup="buscarProductos()"
           class="fadeIn second input-field"
@@ -21,7 +21,9 @@
         />
       </div>
       <div>
-          <b-button variant="primary">Agregar Producto</b-button>
+        <b-button @click.prevent="goTienda" variant="primary"
+          >Agregar Producto</b-button
+        >
       </div>
     </div>
 
@@ -31,7 +33,6 @@
       :key="producto.producto_id"
     >
       <b-card
-     
         v-bind:img-src="producto.fotoSRC"
         v-model="producto.producto_id"
         img-alt="Image"
@@ -62,7 +63,7 @@
         </div>
         <b-form-rating
           variant="warning"
-          v-model="value"
+          v-model="producto.calificacion"
           readonly
         ></b-form-rating>
 
@@ -75,11 +76,70 @@
         <small class="text-muted">Publicado: {{ producto.publicacion }}</small>
 
         <div class="actions">
-          <b-button class="mx-2 btn-actions" @click="eliminarProducto(producto.producto_id)" variant="outline-danger">Eliminar</b-button>
-          <b-button class="mx-2 btn-actions" @click="editarProducto(producto.producto_id)"  variant="outline-warning">Editar</b-button>
+          <div>
+            <b-button
+              class="mx-2 btn-actions"
+              @click="eliminarProducto(producto.producto_id)"
+              variant="outline-danger"
+              >Eliminar</b-button
+            >
+            <b-button
+              class="mx-2 btn-actions"
+              @click="editarProducto(producto.producto_id)"
+              variant="outline-warning"
+              >Editar</b-button
+            >
+            <b-button
+              v-b-modal.modal-scrollable
+              @click.prevent="verListaUsuarios(producto.producto_id)"
+              class="mx-2 btn-actions"
+              variant="outline-primary"
+              >{{producto.deseos[0]}} ♥</b-button
+            >
+          </div>
         </div>
       </b-card>
     </div>
+    <b-modal
+      id="modal-scrollable"
+      scrollable
+      title="Usuarios que tienen este producto en lista de deseos"
+      @show="resetModal"
+      @hidden="resetModal"
+    >
+      <div
+        class="row d-flex justify-content-center"
+        v-for="deseo in deseos"
+        :key="deseo.id"
+      >
+        <b-card
+          no-body
+          class="overflow-hidden my-2 deseos"
+          style="max-width: 540px"
+        >
+          <b-row no-gutters class="d-flex py-2">
+            <b-col md="1">
+              <b-card-img v-bind:src="deseo.fotoSRC" alt="Image"></b-card-img>
+            </b-col>
+            <b-col
+              class="d-flex justify-content-between align-items-center"
+              md="10"
+            >
+              <h5 class="mx-3">{{ deseo.nombre }}</h5>
+              <b-button
+                @click.prevent="goPerfil(deseo.id)"
+                variant="outline-dark"
+                >Ir a perfil</b-button
+              >
+            </b-col>
+          </b-row>
+        </b-card>
+      </div>
+
+      <span v-if="deseos.length === 0">
+        No hay usuarios que lo hayan agregado a lista de deseos
+      </span>
+    </b-modal>
   </div>
 </template>
 
@@ -93,10 +153,10 @@ export default {
     selected: null,
     categorias: [],
     tiendaId: "",
-   
-    value: 4,
+    deseos: [],
   }),
   mounted() {
+    localStorage.setItem("id_producto_edit", null);
     this.tiendaId = localStorage.getItem("id_tienda");
     this.getProductos();
     this.getCategorias();
@@ -111,9 +171,6 @@ export default {
         document.getElementById("selectCategoria").value;
       var ur = "";
 
-      console.log(this.tiendaId);
-
-      console.log(ur);
       if (buscar.length != 0 && selectionarCategoria.length != 0) {
         ur =
           "get_productosTiendas/" +
@@ -144,16 +201,16 @@ export default {
         .then((respose) => {
           this.productos = respose.data;
           this.getPhotoPreview();
-          console.log(this.productos);
+        
         });
     },
     getPhotoPreview() {
-      console.log("in ptp s");
       for (var i = 0; i < this.productos.length; i++) {
         if (this.productos[i].foto.length > 0) {
           this.productos[i].fotoSRC =
             process.env.VUE_APP_API_URL + "get_foto/" + this.productos[i].foto;
         }
+        console.log(this.productos);
       }
     },
 
@@ -179,38 +236,62 @@ export default {
           this.categorias = aux;
         });
     },
-    getFotosProductoId(id = 17) {
+    eliminarProducto(id) {
       axios
-        .get(process.env.VUE_APP_API_URL + "get_fotos_by_producto/" + id)
-        .then((respose) => {
-          console.log(respose);
+        .delete(process.env.VUE_APP_API_URL + "delete_product/" + id)
+        .then((response) => {
+          console.log(response.data);
+          this.getProductos();
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    eliminarProducto(id){
-         axios
-        .delete(process.env.VUE_APP_API_URL + "delete_product/" + id)
-        .then((response) => {
-            console.log(response.data)
-            this.getProductos();
-          
-        }).catch((error) => {
-          console.log(error);
-        });
-
+    editarProducto(id) {
+      localStorage.setItem("id_producto_edit", id);
+      this.$router.push("productosCRUD");
     },
-    editarProducto(id){
-      localStorage.setItem('id_producto_edit', id)
-       this.$router.push("productosCRUD")
+    goTienda() {
+      this.$router.push("productosCRUD");
+    },
+    verListaUsuarios(id) {
+      var url = process.env.VUE_APP_API_URL + "get_deseos_id/" + id;
 
+      console.log(url);
+      axios
+        .get(url)
+        .then((response) => {
+          this.deseos = response.data; //llenamos el vector con los datos JSON obtenidos
+          for (var i = 0; i < this.deseos.length; i++) {
+            if (this.deseos[i].foto_url.length > 0) {
+              this.deseos[i].fotoSRC =
+                process.env.VUE_APP_API_URL +
+                "get_foto/profiles/" +
+                this.deseos[i].foto_url;
+            }
+            console.log(this.deseos);
+          }
+        })
+        .catch((error) => {});
+    },
+    goPerfil(id) {
+      localStorage.setItem("id_perfil", id);
+      this.$router.push("comprador/" + id);
+    },
+    resetModal() {
+      this.deseos = [];
     },
   },
 };
 </script>
 
 <style>
+.card img {
+  height: 140px;
+  width: auto;
+  padding: 5px;
+  border-radius: 10px;
+}
 #divProductos {
   text-align: center;
 }
@@ -226,12 +307,6 @@ export default {
   font-size: 14px;
   background: rgb(255, 255, 255);
   border: solid 2px rgb(205, 206, 206);
-}
-.card img {
-  height: 140px;
-  width: auto;
-  padding: 5px;
-  border-radius: 10px;
 }
 
 .data-producto {
@@ -259,7 +334,7 @@ export default {
   padding-left: 80px;
   padding-top: 15px;
 }
-.btn-actions{
+.btn-actions {
   padding: 0 8px;
 }
 .actions {
@@ -269,24 +344,46 @@ export default {
   padding-top: 3px;
   padding-bottom: 3px;
 }
-.menu{
-    margin: 0  10% 10px 5%;
-    display: flex;
-    justify-content: space-between;
+.menu {
+  margin: 0 10% 10px 5%;
+  display: flex;
+  justify-content: space-between;
 }
 .input-field {
   width: auto;
   height: 40px;
-  border: solid 1px  rgb(3, 133, 226);
+  border: solid 1px rgb(3, 133, 226);
   border-radius: 5px;
   background-color: whitesmoke;
   margin: 0 10px;
   text-align: start;
   padding: 5px;
 }
-.buscar-box{
-    display: flex;
-    width: 80%;
+.buscar-box {
+  display: flex;
+  width: 80%;
 }
-
+.tittle {
+  margin: 10px;
+  text-align: center;
+}
+.profile-img {
+  border-radius: 50px;
+  height: 40px;
+  width: 40px;
+  border: solid 3px white;
+}
+.deseos {
+  height: auto;
+  width: auto;
+}
+.deseos img {
+  height: 40px;
+  width: 40px;
+}
+h4 {
+  padding: 0;
+  margin: 0;
+  color: rgb(83, 83, 83);
+}
 </style>

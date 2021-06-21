@@ -92,7 +92,28 @@ const routes = [
   name:'PreguntaCrud',
   component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/PreguntaCrud')
 
-}
+  },
+  {
+    path: '/subscripciones',
+    name: 'subscripciones',
+    component: () => import('../views/Subscripciones.vue')
+  },
+  {
+    path: '/comprador/:id',
+    name: 'perfilPublico',
+    component: () => import('../views/PerfilPublico.vue')
+  },
+  {
+    path: '/comentarios/',
+    name: 'comentarios',
+    component: () => import('../views/Comentarios.vue')
+  },
+  {
+    path: '/reporte-ventas/',
+    name: 'reporteVentas',
+    component: () => import('../views/ReporteVentas.vue')
+  },
+  
   
 ];
 
