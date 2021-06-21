@@ -102,6 +102,16 @@ const routes = [
     path: '/compradorEditor',
     name:'CompradorEditor',
     component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/CompradorEditor.vue')
+  },
+  {
+    path: '/compradorConfigMenu',
+    name:'CompradorConfigMenu',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/CompradorConfigMenu.vue')
+  },
+  {
+    path: '/metodosPagoAdmin',
+    name:'MetodosPagoAdmin',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/MetodosPagoAdmin.vue')
   }
   
 ];

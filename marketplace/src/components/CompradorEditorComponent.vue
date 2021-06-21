@@ -229,7 +229,7 @@ export default {
     },
 
     exit() {
-      localStorage.removeItem("userId");
+      //localStorage.removeItem("userId");
       this.$router.back();
     },
   },

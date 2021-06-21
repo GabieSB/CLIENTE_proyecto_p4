@@ -91,7 +91,7 @@ export default {
 
     editProfile() {
         localStorage.setItem('userId', this.userData['usuario_id']);
-        this.$router.push((this.userData['usuario_tipo'] == 'T') ? 'TiendaEditor' : 'CompradorEditor');
+        this.$router.push((this.userData['usuario_tipo'] == 'T') ? 'TiendaEditor' : 'CompradorConfigMenu');
     },
   },
 };
