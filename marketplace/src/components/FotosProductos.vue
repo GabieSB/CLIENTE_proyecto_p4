@@ -29,7 +29,7 @@
                 </b-row>
                 <b-row>
                     <b-col>
-                          <h4> Precio:${{producto.precio}}</h4>
+                        <h4> Precio:${{producto.precio}}</h4>
                         <h4> Precio oferta:${{producto.oferta}}</h4>
                         <h4>Stock:{{producto.cantidad}}</h4>
                     </b-col>
@@ -39,7 +39,7 @@
                         <b-form-rating id="rating-inline" v-model="value" variant="warning" @change="setEditarCalificacion()"></b-form-rating>
                     </b-col>
                     <b-col>
-                          <b-form-checkbox @change="cambiar()" id="susb" switch size="lg" v-model="status" value="accepted" unchecked-value="not_accepted">Agregar deseo</b-form-checkbox>
+                        <b-form-checkbox @change="cambiar()" id="susb" switch size="lg" v-model="status" value="accepted" unchecked-value="not_accepted">Agregar deseo</b-form-checkbox>
                     </b-col>
                 </b-row>
                 <b-row>
@@ -53,7 +53,11 @@
                         <b-button squared variant="primary" @click=" irPregunta()">Comentar</b-button><br>
                     </b-col>
                     <b-col md="4">
-                        <b-button squared>Agregar al Carrito</b-button>
+                        <!--b-button squared>Agregar al Carrito</b-button-->
+                        <b-button v-b-modal.modal-prevent-closing variant='danger'>Reportar</b-button>
+                        <b-modal id="modal-prevent-closing" ref="modal" title="Envie su reporte" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+                            <b-form-input id="txtCantidad" placeholder="Cantidad de productos"  type="number" class="input-field"></b-form-input>
+                        </b-modal>
                     </b-col>
                     <br>
                     <b-col md="3">
@@ -79,7 +83,7 @@ export default {
         imagensProd: [],
         value: null,
         status: 'not_accepted',
-         deseos:[],
+        deseos: [],
     }),
     mounted() {
         var a = localStorage.getItem('id_producto');
@@ -89,11 +93,20 @@ export default {
         this.getObtenerCalificacion();
     },
     methods: {
+
         irCompra() {
             this.$router.push("CompraCrud");
         },
         irPregunta() {
             this.$router.push("PreguntaCrud");
+        },
+        handleOk(bvModalEvt) {
+            var objetoReporte = new Object();
+            objetoReporte.idComprador = localStorage.getItem('comprador_id');
+            objetoReporte.idProducto = localStorage.getItem('id_producto');
+            objetoReporte.cantidad = document.getElementById('txtCantidad').value;
+            axios.post(process.env.VUE_APP_API_URL + "agregar_carrito", JSON.stringify(objetoReporte))
+                  .then((respose) => {});
         },
         getFotos() {
             var a = localStorage.getItem('id_producto');
@@ -156,7 +169,7 @@ export default {
         getDeseo() {
             axios.get(process.env.VUE_APP_API_URL + 'get_deseo/' + localStorage.getItem('comprador_id') + '/' + localStorage.getItem('id_producto'))
                 .then((respose) => {
-                    this.deseos= respose.data;
+                    this.deseos = respose.data;
                     // alert(this.subscripcion[0].tienda);
                     this.check();
                 })
@@ -173,7 +186,7 @@ export default {
             if (this.status == 'accepted') {
                 var objeto = new Object();
                 objeto.idComprador = localStorage.getItem('comprador_id');
-                objeto.idProducto= localStorage.getItem('id_producto');
+                objeto.idProducto = localStorage.getItem('id_producto');
                 axios.post(process.env.VUE_APP_API_URL + "agregar_deseo", JSON.stringify(objeto))
                     .then((respose) => {
                         this.getDeseo();
@@ -187,6 +200,14 @@ export default {
             }
         }
     }
+    /*
+     <b-form-input
+                  placeholder="Ingresa la cantidad de tu stock"
+                  v-model="form.cantidad"
+                  required
+                  type="number"
+                  class="input-field"
+                ></b-form-input>*/
 };
 </script>
 
