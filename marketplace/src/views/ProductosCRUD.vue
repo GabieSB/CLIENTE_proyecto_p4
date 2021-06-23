@@ -2,7 +2,9 @@
   <div>
     <Header></Header>
     <div class="container-fluid px-5 mt-1 d-flex flex-column">
-      <div class="row"><h1 class="my-3">{{mensaje}}</h1></div>
+      <div class="row">
+        <h1 class="my-3">{{ mensaje }}</h1>
+      </div>
 
       <div class="row border-top">
         <b-form v-on:submit.prevent="onSubmit">
@@ -81,6 +83,15 @@
                   class="input-field"
                 ></b-form-input>
               </div>
+              <div class="form-group my-2 d-flex flex-column">
+                <label>Precio de oferta</label>
+                <b-form-input
+                  type="number"
+                  placeholder="Ingresa el precio de oferta producto si lo tiene"
+                  v-model="form.precioOferta"
+                  class="input-field"
+                ></b-form-input>
+              </div>
             </div>
           </div>
 
@@ -135,7 +146,7 @@
                 multiple
                 @change="onFileChange"
                 plain
-                required
+                
               ></b-form-file>
               <p>Seleccione las fotos del producto</p>
 
@@ -166,7 +177,7 @@
             </div>
           </div>
 
-          <button type="submit" class="btn mt-5 btn-dark btn-lg btn-block">
+          <button  type="submit" class="btn mt-5 btn-dark btn-lg btn-block">
             Guardar
           </button>
         </b-form>
@@ -179,7 +190,6 @@
 import Header from "@/components/Header.vue";
 import Carousel from "@/components/Carousel.vue";
 import axios from "axios";
-
 
 export default {
   name: "productosCRUD",
@@ -201,55 +211,104 @@ export default {
       pais: "",
       provincia: "",
       canton: "",
-      
+      precioOferta: "",
+      direccionId: "",
+      idProducto: "",
     },
 
     preview_list: [],
     image_list: [],
+    delete_list: [],
+    nameImage_list:[],
     show: false,
     categorias: [],
+    modoCreacion: true,
+    imagenesModificadas: false
   }),
   mounted() {
     this.getCategorias();
     this.getDataTienda();
     this.verificarEdicion();
-    
-   
-      
   },
 
   methods: {
-    verificarEdicion(){
-        if(localStorage.getItem('id_producto_edit') != null){
-          this.mensaje = "Editar prodcuto"
-          this.getDataProducto();
-        }
+    verificarEdicion() {
+      if (localStorage.getItem("id_producto_edit") != "null") {
+        this.mensaje = "Editar producto";
+        this.getDataProducto();
+        this.getImagenesProducto();
+        this.modoCreacion = false
+      }
     },
-    getDataProducto(){
-      var url = process.env.VUE_APP_API_URL + "get_product_by_id/" + localStorage.getItem('id_producto_edit');
+    getDataProducto() {
+      var url =
+        process.env.VUE_APP_API_URL +
+        "get_product_by_id/" +
+        localStorage.getItem("id_producto_edit");
       axios
         .get(url)
         .then((response) => {
           console.log(response.data)
+          this.form.nombre = response.data[0].nombre;
+          this.form.descripcion = response.data[0].descripcion;
+          this.form.precio = response.data[0].precio;
+          this.form.cantidad = response.data[0].cantidad;
+          this.form.costo = response.data[0].cost_envio;
+          this.form.categoria = response.data[0].categoria;
+          this.form.pais = response.data[0].pais;
+          this.form.canton = response.data[0].canton;
+          this.form.provincia = response.data[0].provincia;
+          this.form.duracion = response.data[0].prom_envio;
+          this.form.direccionId = response.data[0].direccion_id
+          this.form.idProducto =   localStorage.getItem("id_producto_edit");
+          if (response.data[0].oferta > 0)
+            this.form.precioOferta = response.data[0].oferta;
         })
         .catch((error) => {});
-    }, 
+    },
+    getImagenesProducto() {
+      var url =
+        process.env.VUE_APP_API_URL +
+        "get_fotos_by_producto/" +
+        localStorage.getItem("id_producto_edit");
+      axios
+        .get(url)
+        .then((response) => {
+          var names = [];
+          names = response.data;
+         
+          for (var i = 0; i < names.length; i++) {
+            this.preview_list.push( process.env.VUE_APP_API_URL + "get_foto/" + names[i].url)  
+            this.nameImage_list.push(process.env.VUE_APP_API_URL + "get_foto/" + names[i].url)
+          }
+        })
+        .catch((error) => {});
+    },
     getCategorias() {
       var url = process.env.VUE_APP_API_URL + "get_categorias";
       axios
         .get(url)
         .then((response) => {
           this.categorias = response.data; //llenamos el vector con los datos JSON obtenidos
-          console.log(this.categorias);
         })
         .catch((error) => {});
     },
     onSubmit(event) {
-      this.form.id = this.$store.state.tienda.tienda_id
+      
+      if(this.modoCreacion){
+        this.create_product(event)
+      }else{
+        this.update_product(event);
+      }
+    },
+    create_product(event){
+      console.log('editabdi')
+      this.form.id = this.$store.state.tienda.tienda_id;
 
       let param = new FormData();
 
       param.append("dataProducto", JSON.stringify(this.form));
+     
 
       for (var i = 0; i < this.image_list.length; i++) {
         param.append("file", this.image_list[i]);
@@ -262,16 +321,48 @@ export default {
           },
         })
         .then((data) => {
-          console.log(data)
-          this.$alertify.success(data.data)
+          this.limpiarCampos();
+          this.$alertify.success(data.data);
         })
         .catch((error) => {
-         console.log(error)
-          this.$alertify.error(error.data)
-          
+          console.log(error);
+          this.$alertify.error(error.data);
         });
+
+    },
+    update_product(event){
+      let param = new FormData();
+       console.log( JSON.stringify(this.form))
+
+      param.append("dataProducto", JSON.stringify(this.form));
+      param.append('imagenesEliminar', JSON.stringify(this.delete_list))
+
+      if(this.imagenesModificadas){
+         for (var i = 0; i < this.image_list.length; i++) {
+          param.append("file", this.image_list[i]);
+         }
+      }     
+
+      axios
+        .post(process.env.VUE_APP_API_URL + "update_product", param, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((data) => {
+          this.limpiarCampos();
+          this.$alertify.success(data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$alertify.error(error.data);
+        });
+
+
     },
     onFileChange(event) {
+      console.log("iamgenes modificadas ")
+      this.imagenesModificadas = true
       var input = event.target;
       var count = input.files.length;
       var index = 0;
@@ -279,6 +370,7 @@ export default {
         while (count--) {
           var reader = new FileReader();
           reader.onload = (e) => {
+            
             this.preview_list.push(e.target.result);
           };
           this.image_list.push(input.files[index]);
@@ -289,8 +381,16 @@ export default {
     },
 
     deleteImagePreview(index) {
+      let imageToDelete = this.preview_list[index]
+
+      if(this.nameImage_list.includes(imageToDelete)){
+        console.log("eliminar de base " + imageToDelete)
+        this.delete_list.push(imageToDelete)
+      }
+
       this.preview_list.splice(index, 1);
       this.image_list.splice(index, 1);
+
     },
 
     getDataTienda() {
@@ -299,11 +399,8 @@ export default {
         .get(process.env.VUE_APP_API_URL + "getTiendaByUserId/" + id_user)
         .then((response) => {
           if (response.statusText == "OK") {
-           
-            this.$store.state.tienda =  response.data
-            console.log(
-              "Se ha obtenido los datos de la tienda"
-            );
+            this.$store.state.tienda = response.data;
+            console.log("Se ha obtenido los datos de la tienda");
           }
         })
         .catch((error) => {
@@ -316,6 +413,26 @@ export default {
           }
         });
     },
+    limpiarCampos(){
+        this.form.nombre = ""
+        this.form.descripcion =""
+        this.form.precio = ""
+        this.form.cantidad =""
+        this.form.costo = ""
+        this.form.categoria =""
+        this.form.pais = ""
+        this.form.canton = ""
+        this.form.provincia =""
+        this.form.duracion = ""
+        this.form.direccionId = ""
+        this.form.idProducto =   ""
+        this.form.precioOferta = ""
+        this.delete_list = []
+        this.preview_list = []
+        this.image_list = []
+    }
+
+    
   },
 };
 </script>
@@ -328,7 +445,7 @@ label {
 .input-field {
   width: 90%;
   height: 40px;
-  border: solid 1px  rgb(3, 133, 226);
+  border: solid 1px rgb(3, 133, 226);
   border-radius: 5px;
   background-color: whitesmoke;
   margin: 0;

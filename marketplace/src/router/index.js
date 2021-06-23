@@ -121,7 +121,40 @@ const routes = [
     path: '/direccionesEnvioAdmin',
     name:'DireccionesEnvioAdmin',
     component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/DireccionesEnvioAdmin.vue')
-  }
+  },
+  {
+    path: '/subscripciones',
+    name: 'subscripciones',
+    component: () => import('../views/Subscripciones.vue')
+  },
+  {
+    path: '/comprador/:id',
+    name: 'perfilPublico',
+    component: () => import('../views/PerfilPublico.vue')
+  },
+  {
+    path: '/comentarios/',
+    name: 'comentarios',
+    component: () => import('../views/Comentarios.vue')
+  },
+  {
+    path: '/reporte-ventas/',
+    name: 'reporteVentas',
+    component: () => import('../views/ReporteVentas.vue')
+  },
+  {
+    path: '/reporte-compras/',
+    name: 'reporteCompras',
+    component: () => import('../views/ReporteCompras.vue')
+  },
+  {
+    path: '/reporte-subscripciones/',
+    name: 'reporteSubscripciones',
+    component: () => import('../views/ReporteSubscripciones.vue')
+  },
+  
+
+  
   
 ];
 
