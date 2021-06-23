@@ -140,13 +140,11 @@
 
 
 <script>
-import axios from "axios";
-import { main } from "../main.js";
 
 export default {
   setup() {},
 
-  name: "UserEditor",
+  name: "UserCreatorComponent",
 
   data: () => ({
     usuario: "",
@@ -182,27 +180,12 @@ export default {
       }
     },
 
-    insertData(formData) {
-      axios
-        .post(
-          process.env.VUE_APP_API_URL + "/create_usuario",
-          JSON.stringify(formData)
-        )
-        .then((response) => {
-          this.$router.push("/");
-          this.$alertify.success(response.data);
-        })
-        .catch((error) => {
-          this.proccessAxiosError(error);
-        });
-    },
-
     saveData() {
-      main.AppContext["userData"] = this.buildFormData();
+      localStorage.setItem('userData',JSON.stringify(this.buildFormData()));
       if (this.tipoUsario == "T") {
-        this.$router.push("crudTienda");
+        this.$router.push("tiendaCreator");
       } else {
-        this.$router.push("crudComprador");
+        this.$router.push("compradorCreator");
       }
     },
 
@@ -222,9 +205,9 @@ export default {
     },
 
     deployPrechagedData(){
-        if(main.AppContext['userData'] != undefined){
-          let data = main.AppContext['userData'];
-
+        if(localStorage.getItem('userData') != undefined){
+          let data = JSON.parse(localStorage.getItem('userData'));
+          
           this.usuario =data['usuario_nom_urs'];
           this.password = data['usuario_contrasena'];
           this.email = data['usuario_email'];
@@ -258,7 +241,7 @@ export default {
 }
 
 input {
-  border-bottom-color: #b0bec5;
+  border-bottom-color: #546E7A;
   background: white;
 }
 

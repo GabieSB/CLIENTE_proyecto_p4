@@ -51,28 +51,28 @@ const routes = [
 
   },
   {
-    path: '/crudUsuario',
-    name: 'CrudUsuario',
+    path: '/userCreator',
+    name: 'UserCreator',
     props:true,
 
 
-    component: () => import('../views/CrudUsuario.vue')
+    component: () => import('../views/UserCreator.vue')
   },
   {
-    path: '/crudTienda',
-    name: 'CrudTienda',
+    path: '/tiendaCreator',
+    name: 'TiendaCreator',
     props:true,
 
 
-    component: () => import('../views/CrudTienda.vue')
+    component: () => import('../views/TiendaCreator.vue')
   },
   {
-    path: '/crudComprador',
-    name: 'CrudComprador',
+    path: '/compradorCreator',
+    name: 'CompradorCreator',
     props:true,
 
 
-    component: () => import('../views/CrudComprador.vue')
+    component: () => import('../views/CompradorCreator.vue')
   },
  
   {
@@ -92,7 +92,32 @@ const routes = [
   name:'PreguntaCrud',
   component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/PreguntaCrud')
 
-}
+  },
+  {
+    path: '/tiendaEditor',
+    name:'TiendaEditor',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/TiendaEditor.vue')
+  },
+  {
+    path: '/compradorEditor',
+    name:'CompradorEditor',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/CompradorEditor.vue')
+  },
+  {
+    path: '/compradorConfigMenu',
+    name:'CompradorConfigMenu',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/CompradorConfigMenu.vue')
+  },
+  {
+    path: '/metodosPagoAdmin',
+    name:'MetodosPagoAdmin',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/MetodosPagoAdmin.vue')
+  },
+  {
+    path: '/direccionesEnvioAdmin',
+    name:'DireccionesEnvioAdmin',
+    component: () => import(/* webpackChunkName: "DashboardComprador" */ '../views/DireccionesEnvioAdmin.vue')
+  }
   
 ];
 

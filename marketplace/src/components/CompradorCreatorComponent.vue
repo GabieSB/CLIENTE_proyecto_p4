@@ -1,19 +1,40 @@
 <template>
   <div class="container-fluid">
-    <h1>Datos adicionales de la tienda</h1>
+    <h1>Datos de cliente</h1>
     <form class="row" v-on:submit.prevent="saveData">
       <div class="col-sm-8" style="background-color: #f5f5f5">
         <div class="desc_form" style="background-color: #f5f5f5">
-          <label class="inputLabel" for="descripcion">Descripción</label>
+          <div>
+            <label class="inputLabel" for="cod_postal">Código postal</label>
+          </div>
+          <input
+            id="cod_postal"
+            type="text"
+            placeholder="Digita aquí tu código postal"
+            v-model="codigoPostal"
+            required
+          />
+
+          <div><label class="inputLabel" for="casillero">Casillero</label></div>
+          <input
+            id="casillero"
+            type="text"
+            placeholder="Digita aquí tu asillero"
+            v-model="casillero"
+            required
+          />
+
+          <div>
+            <label class="inputLabel" for="observaciones">Detalles</label>
+          </div>
           <b-textarea
-            name="descripcion"
-            id="descripc1ion"
-            cols="30"
-            rows="20"
+            id="observaciones"
+            type="text"
+            placeholder="Detalles adicionales de tu dirección"
             maxlength="512"
-            placeholder="Ingresa aqui observaciones o detalles sobre tu tienda"
-            v-model="detalles"
+            v-model="observaciones"
           ></b-textarea>
+
           <b-button class="submit-btn btn-success" type="submit"
             >Finzalizar y guardar</b-button
           >
@@ -45,17 +66,21 @@ import { main } from "../main.js";
 export default {
   setup() {},
 
-  name: "DetallesTienda",
-  props: ["items"],
+  name: "CompradorCreatorComponent",
 
   data: () => ({
-    detalles: "",
+    codigoPostal: "",
+    casillero: "",
+    observaciones: "",
     fotoPerfil: undefined,
   }),
+
   methods: {
     buildUserData() {
-      let lastData = main.AppContext["userData"];
-      lastData["tienda_descripcion"] = this.detalles;
+      let lastData = JSON.parse(localStorage.getItem('userData'));
+      lastData["envio_cod_postal"] = this.codigoPostal;
+      lastData["envio_casillero"] = this.casillero;
+      lastData["envio_observaciones"] = this.observaciones;
       return lastData;
     },
 
@@ -85,7 +110,7 @@ export default {
         .then((response) => {
           this.$router.push("/");
           this.$alertify.success(response.data);
-          main.AppContext["userData"] = undefined; //Se limpia entrada de datos "userData" del AppContext
+          localStorage.removeItem('userData')
         })
         .catch((error) => {
           this.proccessAxiosError(error);
@@ -107,7 +132,6 @@ export default {
 </script>
 
 
-
 <style scoped>
 .container-fluid {
   padding: 50px;
@@ -115,6 +139,11 @@ export default {
 
 .desc_form {
   padding: 50px;
+}
+
+input {
+  border-bottom-color: #546E7A;
+  background: white;
 }
 
 .profile-pic {
