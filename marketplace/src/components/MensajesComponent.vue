@@ -53,7 +53,7 @@ export default {
     methods: {
         getCometarios() {
             var idProducto = localStorage.getItem('id_producto');
-            axios.get(process.env.VUE_APP_API_URL + 'get_comentario/' + idProducto)
+            axios.get(process.env.VUE_APP_API_URL + 'get_comentario2/' + idProducto)
                 .then((respose) => {
                     this.comentarios = respose.data;
                     this.getFormatoFecha();
@@ -76,7 +76,7 @@ export default {
             var d = new Date();
             // alert(d);
             objeto.fecha = d;
-            axios.post(process.env.VUE_APP_API_URL + "agregar_comentario", JSON.stringify(objeto))
+            axios.post(process.env.VUE_APP_API_URL + "agregar_comentario2", JSON.stringify(objeto))
                 .then((respose) => {
                     this.getCometarios();
 
