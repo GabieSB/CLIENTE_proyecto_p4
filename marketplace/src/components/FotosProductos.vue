@@ -54,9 +54,9 @@
                     </b-col>
                     <b-col md="4">
                         <!--b-button squared>Agregar al Carrito</b-button-->
-                        <b-button v-b-modal.modal-prevent-closing variant='danger'>Reportar</b-button>
-                        <b-modal id="modal-prevent-closing" ref="modal" title="Envie su reporte" @show="resetModal" @hidden="resetModal" @ok="handleOk">
-                            <b-form-input id="txtCantidad" placeholder="Cantidad de productos"  type="number" class="input-field"></b-form-input>
+                        <b-button v-b-modal.modal-prevent-closingo variant='primary'>Agregar carrito</b-button>
+                        <b-modal id="modal-prevent-closingo" ref="modal" title="Cantidad de unidades" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+                            <b-form-input id="txtCantidad2" placeholder="Cantidad de productos"  type="number" class="input-field"></b-form-input>
                         </b-modal>
                     </b-col>
                     <br>
@@ -104,7 +104,7 @@ export default {
             var objetoReporte = new Object();
             objetoReporte.idComprador = localStorage.getItem('comprador_id');
             objetoReporte.idProducto = localStorage.getItem('id_producto');
-            objetoReporte.cantidad = document.getElementById('txtCantidad').value;
+            objetoReporte.cantidad = document.getElementById('txtCantidad2').value;
             axios.post(process.env.VUE_APP_API_URL + "agregar_carrito", JSON.stringify(objetoReporte))
                   .then((respose) => {});
         },

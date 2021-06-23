@@ -63,12 +63,19 @@
                         <!--  {{getCarrito()}}-->
                         <div id='menuDeseoxs' v-for="d in carrito" :key="d.producto">
                             <b-col>
+                                {{d.cantidad}}
                                 <b-img thumbnail fluid v-bind:src='d.fotoSRC' alt="Image 1" style="max-width: 4rem;"></b-img>{{d.nombre}}
                                 <b-button squared variant="danger" @click="eliminarCarrito(d.producto)">x</b-button>
-                                <b-button squared variant="primary" @click="irCompra()">E</b-button>
+                                <b-button v-b-modal.modal-prevent-closing2 variant='primary' @click="productoEditar(d.producto)">E</b-button>
+
                             </b-col>
+
                         </div>
-                        <b-button squared variant="primary">Comprar todo</b-button>
+
+                        <b-button squared variant="primary" @click="pasarComprarTodo()">Comprar todo</b-button>
+                        <b-modal id="modal-prevent-closing2" ref="modal" title="EditarCarrito" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+                            <b-form-input id="txtCantidad" placeholder="Cantidad de productos" type="number" class="input-field"></b-form-input>
+                        </b-modal>
                     </b-dropdown-item>
 
                 </b-nav-item-dropdown>
@@ -86,7 +93,8 @@ export default {
     data: () => ({
         deseos: [],
         suscripcion: [],
-        carrito: []
+        carrito: [],
+        idProductoEditar: null
     }),
     mounted() {
         this.getDeseo();
@@ -94,6 +102,9 @@ export default {
         this.getCarrito();
     },
     methods: {
+        pasarComprarTodo(){
+               this.$router.push("CompraCrud");
+        },
         irProductoDeseo(idProducto) {
             localStorage.setItem("id_producto", idProducto);
             this.$router.push("ProductosDescripcion").catch(err => {});
@@ -103,8 +114,21 @@ export default {
             this.$router.push("Tiendas");
 
         },
+        productoEditar(idProduct) {
+            this.idProductoEditar = idProduct;
+        },
+        handleOk() {
+            var objetoReporte = new Object();
+            objetoReporte.idComprador = localStorage.getItem('comprador_id');
+            objetoReporte.idProducto = this.idProductoEditar;
+            var aux=document.getElementById('txtCantidad').value;
+            objetoReporte.cantidad = aux;
+          axios.put(process.env.VUE_APP_API_URL + "editar_carrito", JSON.stringify(objetoReporte))
+                .then((respose) => {
+                    this.getCarrito();
+                });
+        },
         getDeseo() {
-            // alert('eee');
             axios.get(process.env.VUE_APP_API_URL + 'get_misDeseos/' + localStorage.getItem('comprador_id'))
                 .then((respose) => {
                     this.deseos = respose.data;
@@ -154,12 +178,12 @@ export default {
                 }
             }
         },
-        eliminarCarrito(idProducto){
+        eliminarCarrito(idProducto) {
             alert('DD');
-              axios.delete(process.env.VUE_APP_API_URL + "eliminar_carrito/" +
-                    localStorage.getItem('comprador_id') + '/' +idProducto).then((respose) => {
-                    this.getCarrito();
-                });
+            axios.delete(process.env.VUE_APP_API_URL + "eliminar_carrito/" +
+                localStorage.getItem('comprador_id') + '/' + idProducto).then((respose) => {
+                this.getCarrito();
+            });
         }
     }
 };
