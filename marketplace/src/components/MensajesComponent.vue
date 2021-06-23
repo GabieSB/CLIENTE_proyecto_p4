@@ -4,6 +4,7 @@
         <label class="sr-only" for="inline-form-input-name">Mensaje:</label>
         <b-form-input id="idMensaje" class="mb-2 mr-sm-2 mb-sm-0" placeholder="¿Pregunta?"></b-form-input>
         <b-button variant="primary" @click="enviarMensaje()">Enviar</b-button>
+        
     </b-form>
 
     <b-card id="contedor" bg-variant="primary" text-variant="dark" v-for="coment in comentarios" :key="coment.comentario_id">

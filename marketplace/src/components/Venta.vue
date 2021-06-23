@@ -11,7 +11,7 @@
             <label>
                 <h3>Formas de pago</h3>
             </label>
-            <b-form-select id="selectFormaPago" v-model="selected" :options="formaPago" class="mb-3"></b-form-select>
+            <b-form-select id="fmPago" v-model="selected" :options="formaPago" class="mb-3"></b-form-select>
         </b-col>
         <b-col>
             <label>
@@ -19,6 +19,7 @@
             </label>
             <b-form-select id="selectFormaPago" v-model="selected2" :options="dirrecionEnvio" class="mb-3"></b-form-select>
         </b-col>
+        <b-button variant="danger" @click="comprar()">Comprar</b-button>
     </b-row>
 </div>
 </template>
@@ -122,7 +123,14 @@ export default {
                         process.env.VUE_APP_API_URL + "get_foto/" + this.imagenes[i].foto;
                 }
             }
+        },
+        comprar(){
+              var formaPago = document.getElementById("fmPago").value
+                 axios.get(process.env.VUE_APP_API_URL + 'get_comprar/' + localStorage.getItem('comprador_id')+'/'+formaPago)
+                .then((respose) => {
+                })
         }
+        
 
     }
 
