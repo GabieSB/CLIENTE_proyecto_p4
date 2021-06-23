@@ -7,8 +7,10 @@ import store from "./store"
 import VueAxios from 'vue-axios'
 import VueAlertify from "vue-alertify"
 import VueFormulate from '@braid/vue-formulate'
+
 //import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
+
 
 
 
@@ -24,6 +26,8 @@ Vue.use(VueAxios, axios)
  
 Vue.use(VueAlertify)
 Vue.use(VueFormulate)
+
+
 
 
 

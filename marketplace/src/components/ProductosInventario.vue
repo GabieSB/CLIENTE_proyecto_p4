@@ -210,14 +210,14 @@ export default {
           this.productos[i].fotoSRC =
             process.env.VUE_APP_API_URL + "get_foto/" + this.productos[i].foto;
         }
-        console.log(this.productos);
+      
       }
     },
 
     getCategorias() {
       console.log(this.tiendaId);
       axios
-        .get(process.env.VUE_APP_API_URL + "get_categorias2/" + this.tiendaId)
+        .get(process.env.VUE_APP_API_URL + "get_categorias")
         .then((response) => {
           var aux = [];
           aux[0] = {
@@ -227,10 +227,7 @@ export default {
           var cont = 1;
           for (var x of response.data) {
             this.selected,
-              (aux[cont] = {
-                value: x.categoria_id,
-                text: x.categoria,
-              });
+              (aux[cont] = x);
             cont++;
           }
           this.categorias = aux;
@@ -240,11 +237,15 @@ export default {
       axios
         .delete(process.env.VUE_APP_API_URL + "delete_product/" + id)
         .then((response) => {
-          console.log(response.data);
+          
           this.getProductos();
+          this.$alertify.success(data.data);
         })
         .catch((error) => {
           console.log(error);
+          this.$alertify.success(error);
+
+
         });
     },
     editarProducto(id) {

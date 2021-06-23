@@ -6,7 +6,7 @@
         Marktetplace
       </div>
       <div class="datos">
-        <h3 class="my-3">Reporte de ventas de {{tiendaNombre}} </h3>
+        <h3 class="my-3">Reporte de ventas de {{ this.nombre_usuario}}</h3>
         <span>Desde {{ this.startDate }} hasta {{ this.endDate }}</span>
       </div>
       <div class="icon">
@@ -19,17 +19,18 @@
       </div>
     </div>
     <div class="data">
-    
       <b-table striped hover :items="items" :fields="fields"></b-table>
       <span>Total: {{ total }}</span>
-     
-    </div> 
-     
-    <div class="chart">
-        <h2 v-if="items.length == 0">No existen ventas registradas</h2>
-        <DoughnutChart  class="doughnout" v-if="items.length > 0" :data = "chartData" :options = "options" ></DoughnutChart>
     </div>
-     <span class="px-2">Generado el {{fecha}}</span>
+    <div class="chart">
+      <BarChart
+        class="bar"
+        v-if="itemsChart.length > 0"
+        :data="chartData"
+        :options="options"
+      ></BarChart>
+    </div>
+    <span class="px-2">Generado el {{fecha}}</span>
 
     <b-modal
       hide-footer
@@ -72,84 +73,95 @@
         >
       </div>
     </b-modal>
-    
-
   </div>
 </template>
 <script>
 import Header from "@/components/Header.vue";
 import axios from "axios";
-import DoughnutChart from '@/components/DoughnutChart.vue'
-;
-
-
+import BarChart from "@/components/BarChart.vue";
 
 export default {
-  name: "ReporteVentas",
+  name: "ReporteCompras",
   components: {
     Header,
-    DoughnutChart
-
+    BarChart,
   },
   data: () => ({
-    idTienda: "",
-    tiendaNombre: "",
+    idComprador: "",
     subscripciones: [],
     fields: [
-      "fecha_publicacion",
-      "nombre",
+      "nombre_producto",
+      "descripcion_producto",
       "categoria",
-      "precio_estimado",
-      "cantidad_vendida",
-      "total",
+      "precio",
+      "cantidad_comprada",
+      "precio_total",
+      "precio_final",
+      "tarjeta",
     ],
 
     chartData: {
-        labels: [],
-        datasets: [
+      labels: [],
+      datasets: [
+        {
+          label: "Producto en el que se gastó más dinero",
+          borderWidth: 1,
+          backgroundColor: [],
+          borderColor: [],
+          pointBorderColor: '#2554FF',
+          data: [],
+        },
+      ],
+    },
+    options: {
+      scales: {
+        yAxes: [
           {
-            borderWidth: 1,
-            borderColor: [],
-            backgroundColor: [],
-            data: [],
+            ticks: {
+              beginAtZero: true,
+            },
+            gridLines: {
+              display: true,
+            },
+          },
+        ],
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
           },
         ],
       },
-      options: {
-        legend: {
-          display: true,
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-      
+      legend: {
+        display: true,
       },
+      responsive: true,
+      maintainAspectRatio: false,
+    },
     items: [],
+    itemsChart: [],
     startDate: "",
     endDate: "",
     modalShow: true,
     showChart: false,
     total: 0,
+    nombre_usuario: "",
     fecha: ""
   }),
   mounted() {
-    
-    this.idTienda = localStorage.getItem("id_tienda");
-    this.tiendaNombre =  localStorage.getItem("tienda_nombre")
-
+    this.idComprador = 1;
     var aux = new Date();
     this.endDate = new Date().toISOString().split("T")[0];
     aux.setDate(aux.getDate() - 10);
     this.startDate = aux.toISOString().split("T")[0];
-
-    this.getFormatoFechaHoras()
-
   },
   methods: {
-    getUltimasVentas() {
+    getCompras() {
       var url =
         process.env.VUE_APP_API_URL +
-        "/get_ventas_between/" +
-        this.idTienda +
+        "/get_compras_between/" +
+        this.idComprador +
         "/" +
         this.startDate +
         "/" +
@@ -159,12 +171,32 @@ export default {
         .get(url)
         .then((response) => {
           this.items = response.data; //llenamos el vector con los datos JSON obtenidos
-          console.log(this.items);
-          this.getFormatoFecha();
-          this.getTotal();
-          this.generarChart()
-          
-          
+          if(this.items.length > 0){
+            console.log(this.items);
+            this.getFormatoFecha();
+            this.getTotal();
+            this.getProductosMasGastado();
+            this.nombre_usuario = this.items[0].nombre_usuario
+          }
+        })
+        .catch((error) => {});
+    },
+    getProductosMasGastado() {
+      var url =
+        process.env.VUE_APP_API_URL +
+        "/get_productos_mas_dinero/" +
+        this.idComprador +
+        "/" +
+        this.startDate +
+        "/" +
+        this.endDate;
+
+      axios
+        .get(url)
+        .then((response) => {
+            this.itemsChart = response.data
+            console.log(this.itemsChart)
+          this.generarChart();
         })
         .catch((error) => {});
     },
@@ -185,39 +217,45 @@ export default {
     },
     getTotal() {
       for (var i = 0; i < this.items.length; i++) {
-        this.total += this.items[i].total;
+        this.total += this.items[i].precio_total;
       }
     },
     generar() {
-      this.getUltimasVentas()
-      this.modalShow = false
-      
-     
+      this.getCompras();
+      this.modalShow = false;
     },
     generarChart() {
-      console.log("in geenrar chart")
-      console.log(this.items.length)
-      for (var i = 0; i < this.items.length; i++) {
-        this.chartData.labels[i] = "[" + this.items[i].cantidad_vendida +"] " + this.items[i].nombre;
-        var color =  this.random_rgba() ;
-        this.chartData.datasets[0].borderColor[i] = " rgba(128,128,128,1)"
-         this.chartData.datasets[0].backgroundColor[i] = color; 
-         this.chartData.datasets[0].data[i] = this.items[i].cantidad_vendida;
+      console.log("in geenrar chart");
+      console.log(this.itemsChart.length);
+      for (var i = 0; i < this.itemsChart.length; i++) {
+        this.chartData.labels[i] = this.itemsChart[i].nombre_producto;
+        var color = this.random_rgba();
+        this.chartData.datasets[0].borderColor[i] = " rgba(128,128,128,1)";
+        this.chartData.datasets[0].backgroundColor[i] = color;
+        this.chartData.datasets[0].data[i] = this.itemsChart[i].total;
       }
 
-      console.log(this.chartData)
-       this.showChart = true
+      console.log(this.chartData);
+      this.showChart = true;
     },
     random_rgba() {
-      console.log("dentro del randn")
+      console.log("dentro del randn");
       var o = Math.round,
         r = Math.random,
         s = 255;
       return (
-        "rgba(" + 0 + "," + o(r() * s) + "," + o(r() * s) + "," + r().toFixed(1) + ")"
+        "rgba(" +
+        0 +
+        "," +
+        o(r() * s) +
+        "," +
+        o(r() * s) +
+        "," +
+        r().toFixed(1) +
+        ")"
       );
     },
-     getFormatoFechaHoras() {
+    getFormatoFechaHoras() {
         let current_datetime = new Date()
         let formatted_date =
           current_datetime.getDate() +
@@ -227,7 +265,6 @@ export default {
           current_datetime.getFullYear() + " " + current_datetime.getHours() + ":"+ current_datetime.getMinutes();
         this.fecha = formatted_date
     },
-    
   },
 };
 </script>
@@ -273,9 +310,9 @@ button {
   display: flex;
   justify-content: space-between;
 }
-.chart{
+.chart {
   display: flex;
   justify-content: center;
+  height: 200px;
 }
-
 </style>

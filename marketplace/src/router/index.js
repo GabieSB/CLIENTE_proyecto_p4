@@ -113,6 +113,18 @@ const routes = [
     name: 'reporteVentas',
     component: () => import('../views/ReporteVentas.vue')
   },
+  {
+    path: '/reporte-compras/',
+    name: 'reporteCompras',
+    component: () => import('../views/ReporteCompras.vue')
+  },
+  {
+    path: '/reporte-subscripciones/',
+    name: 'reporteSubscripciones',
+    component: () => import('../views/ReporteSubscripciones.vue')
+  },
+  
+
   
   
 ];

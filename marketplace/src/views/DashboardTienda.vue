@@ -43,7 +43,7 @@
             >Subscripciones</b-button
           >
         </b-card>
-         <b-card
+        <b-card
           img-src="https://booster.io/wp-content/uploads/product-add-to-cart-e1438362099361.png"
           img-alt="Image"
           img-top
@@ -55,19 +55,7 @@
             >Comentarios</b-button
           >
         </b-card>
-         <b-card
-          img-src="https://booster.io/wp-content/uploads/product-add-to-cart-e1438362099361.png"
-          img-alt="Image"
-          img-top
-          tag="article"
-          style="max-width: 20rem"
-          class="m-2"
-        >
-          <b-button @click="goSubscripciones" variant="primary"
-            >Subscripciones</b-button
-          >
-        </b-card>
-         <b-card
+        <b-card
           img-src="https://booster.io/wp-content/uploads/product-add-to-cart-e1438362099361.png"
           img-alt="Image"
           img-top
@@ -80,7 +68,6 @@
           >
         </b-card>
         <b-modal
-        
           id="modal-prevent-closing"
           ref="modal"
           title="Agregar Categoría"
@@ -104,24 +91,28 @@
             </b-form-group>
           </form>
         </b-modal>
+       
       </div>
     </div>
   </div>
 </template>
 <script>
 import Header from "@/components/Header.vue";
+import ModalSeleccionarFechas from "@/components/ModalSeleccionarFechas.vue";
 
 import axios from "axios";
- 
+
 export default {
   name: "Dashboard",
   components: {
     Header,
+    ModalSeleccionarFechas,
   },
   data: () => ({
     nombreTienda: "",
     name: "",
     nameState: "",
+    showModal: false,
   }),
   mounted() {
     this.getDataTienda();
@@ -172,16 +163,18 @@ export default {
     goInventario() {
       this.$router.push("inventarioProductos");
     },
-    goSubscripciones(){
-      this.$router.push('subscripciones')
-
+    goSubscripciones() {
+      this.$router.push("subscripciones");
     },
-    goComentarios(){
-      this.$router.push('comentarios')
-
+    goComentarios() {
+      this.$router.push("comentarios");
     },
-    goReporteVentas(){
-      this.$router.push('reporte-ventas')
+    goReporteVentas() {
+      let routeUrl = this.$router.resolve({
+          path: "/reporte-ventas",
+     });
+     localStorage.setItem("tienda_nombre", this.nombreTienda)
+     window.open(routeUrl .href, '_blank');
     },
     getDataTienda() {
       const id_user = localStorage.getItem("id_user");
