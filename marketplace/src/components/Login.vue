@@ -79,6 +79,7 @@ export default {
                 localStorage.setItem('usuario_id',data.data.usuario_id);
                 console.log(localStorage.getItem('usuario_id'));
                this.$router.push("dashboardComprador");
+               this.getComprador();
             }else{
                 
             
@@ -105,6 +106,18 @@ export default {
       localStorage.removeItem('userData');
       this.$router.push("userCreator");
     },
+    getComprador() {
+            var idUsuario = localStorage.getItem('usuario_id');
+                 axios.get(process.env.VUE_APP_API_URL + 'get_comprador/' + idUsuario)
+                     .then((respose) => {
+                        
+                         var cont = respose.data;
+                      localStorage.setItem('comprador_id',cont[0].comprador_id);
+               //   alert(localStorage.getItem('comprador_id'));
+                       //console.log(x);
+                      
+                     }) 
+             },
   },
 };
 </script>

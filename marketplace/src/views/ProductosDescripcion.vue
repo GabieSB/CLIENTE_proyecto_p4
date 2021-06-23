@@ -16,8 +16,8 @@ export default {
   components: {
     Header,
     SidebarComponent,
-    FotosProductos
-
+    FotosProductos,
+   
   }
 
 };

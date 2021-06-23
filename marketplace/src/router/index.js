@@ -5,13 +5,17 @@ import Dashboard from '../views/DashboardTienda.vue'
 import ProductosCRUD from '../views/ProductosCRUD.vue'
 
 Vue.use(VueRouter);
-
+//VueRouterPush = Router.prototype.push
+//Router.prototype.push = function push (to) {
+ // return VueRouterPush.call(this, to).catch(err => err)
+//}
 const routes = [
   {
     path: "/",
     name: "Home",
     component: Home,
   },
+ 
   {
     path: "/about",
     name: "About",

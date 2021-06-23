@@ -3,7 +3,7 @@
     <div>
         <div class="cads-tienda" v-for="tienda in tiendas" :key="tienda.tienda_id">
 
-            <b-card v-bind:title="tienda.nombre" img-src="https://picsum.photos/600/300/?image=25" img-alt="Image" img-top tag="article" style="max-width: 20rem;" class="mb-2">
+            <b-card v-bind:title="tienda.nombre" v-bind:img-src='tienda.fotoSRC' img-alt="Image" img-top tag="article" style="max-width: 20rem;" class="mb-2">
                 <b-card-text>
                     {{tienda.descripcion}}
                 </b-card-text>
@@ -47,8 +47,19 @@ export default {
             axios.get(process.env.VUE_APP_API_URL + 'get_tiendas/')
                 .then((respose) => {
                     this.tiendas = respose.data;
+                    this.getPhotoPreview();
                 })
 
+        },
+          getPhotoPreview() {
+            // console.log("in ptp s");
+            for (var i = 0; i < this.tiendas.length; i++) {
+                if (this.tiendas[i].foto.length > 0) {
+                    this.tiendas[i].fotoSRC =
+                        process.env.VUE_APP_API_URL + "get_foto/profiles/" + this.tiendas[i].foto;
+                     
+                }
+            }
         }
     },
     props:{
