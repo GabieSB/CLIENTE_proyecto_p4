@@ -114,12 +114,10 @@ export default {
             axios.get(process.env.VUE_APP_API_URL + 'get_informacion_tienda/' + localStorage.getItem('id_tienda'))
                 .then((respose) => {
                     this.tienda = respose.data;
-                    //this.getPhotoPreview();
                 })
 
         },
         comprasRealizadas(){
-            //alert('dd')
               axios.get(process.env.VUE_APP_API_URL + 'get_reporteFactura/'+localStorage.getItem('comprador_id')+'/'+ localStorage.getItem('id_tienda'))
                 .then((respose) => {
                     this.comp = respose.data.cantidad;
@@ -127,7 +125,6 @@ export default {
                 })       
         },
         reportesRealizados(){
-            //alert('dd')
               axios.get(process.env.VUE_APP_API_URL + 'get_reportesRealizados/'+localStorage.getItem('comprador_id')+'/'+ localStorage.getItem('id_tienda'))
                 .then((respose) => {
                     this.reportesR = respose.data.cantidad;

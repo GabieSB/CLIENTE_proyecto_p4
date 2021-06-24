@@ -4,12 +4,10 @@
     <div>
         <b-table striped hover :items="carrito">
             <template #cell(Acciones)="data">
-                <!-- row para obtener datos de fila -->
                 <b-button size="sm" variant="danger" @click="eliminarProductoCarrito(data.value)">Eliminar
                 </b-button>
             </template>
             <template #cell(imagen)="data2">
-                <!-- row para obtener datos de fila -->
                 <b-img v-bind:src='data2.value' fluid alt="Fluid image" heigth=75 width=70></b-img>
             </template>
         </b-table>
@@ -34,7 +32,7 @@
         <b-col>
             <input type="text" id="cvv" class="fadeIn second" name="cvv" placeholder="cvv" required /></b-col>
         <b-col>
-            <b-button variant="danger" @click="comprar()">Comprar</b-button>
+            <b-button variant="danger" @click="comprar()" v-if="carrito.length">Comprar</b-button>
         </b-col>
 
     </b-row>
@@ -54,7 +52,6 @@ export default {
         formaPago: [],
         selected2: null,
         dirrecionEnvio: [],
-        //  imagenes: []
     }),
     mounted() {
         this.getCarrito();
@@ -66,7 +63,6 @@ export default {
             axios.get(process.env.VUE_APP_API_URL + 'get_miCarrito/' + localStorage.getItem('comprador_id'))
                 .then((respose) => {
                     this.carrito = respose.data;
-                    //this.getPhotoPreview();
                     var aux = [];
                     var cont = 0;
                     for (var x of respose.data) {
@@ -140,19 +136,21 @@ export default {
             return process.env.VUE_APP_API_URL + "get_foto/" + x;
         },
         comprar() {
-            self = this;
-            this.$alertify.confirm('¿Desea comprar los productos?',
-                function () {
-                    self.realizarCompra()
-                },
-                function () {}
-            );
+          
+                self = this;
+                this.$alertify.confirm('¿Desea comprar los productos?',
+                    function () {
+                        self.realizarCompra()
+                    },
+                    function () {}
+                );
+            
         },
         realizarCompra() {
+
             var formaPago = document.getElementById("fmPago").value;
             var cv = document.getElementById("cvv").value;
             var dirrecion = document.getElementById("dirrecion").value;
-            // alert(dirrecion)
             axios.get(process.env.VUE_APP_API_URL + 'get_comprar/' + localStorage.getItem('comprador_id') + '/' + formaPago + '/' + cv + '/' + dirrecion)
                 .then((respose) => {
                     alert(respose.data)
@@ -166,13 +164,12 @@ export default {
                     self.eliminar(idProducto);
                 },
                 function () {});
-
         },
-        eliminar(idProducto){
+        eliminar(idProducto) {
             axios.delete(process.env.VUE_APP_API_URL + "eliminar_carrito/" +
-                        localStorage.getItem('comprador_id') + '/' + idProducto).then((respose) => {
-                        this.getCarrito();
-                    });
+                localStorage.getItem('comprador_id') + '/' + idProducto).then((respose) => {
+                this.getCarrito();
+            });
         }
 
     }
