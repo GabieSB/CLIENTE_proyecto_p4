@@ -179,7 +179,6 @@ export default {
             }
         },
         eliminarCarrito(idProducto) {
-            alert('DD');
             axios.delete(process.env.VUE_APP_API_URL + "eliminar_carrito/" +
                 localStorage.getItem('comprador_id') + '/' + idProducto).then((respose) => {
                 this.getCarrito();

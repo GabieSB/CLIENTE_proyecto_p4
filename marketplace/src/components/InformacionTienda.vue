@@ -1,17 +1,28 @@
 <template>
 <div>
-    <b-card overlay img-src="https://picsum.photos/900/250/?image=3" img-height="300" img-alt="Card Image" text-variant="white" title="Image Overlay" sub-title="Subtitle">
+    <b-card overlay img-src="https://picsum.photos/900/250/?image=3" img-height="300" img-alt="Card Image" text-variant="white" v-bind:title="tienda.nombre" v-bind:sub-title='tienda.descripcion'>
         <b-card-text>
-            INFORMACION
+            <h4>Teléfono: {{tienda.telefono}}</h4>
+        </b-card-text>
+        <b-card-text>
+            <h4>Correo: {{tienda.correo}}</h4>
+        </b-card-text>
+           <b-card-text>  
+            <h4>Dirreción: {{tienda.pais}},{{tienda.provincia}},{{tienda.canton}}</h4>
         </b-card-text>
         <b-card-text>
             <b-form-checkbox @change="cambiar()" id="susb" switch size="lg" v-model="status" value="accepted" unchecked-value="not_accepted">Suscripción</b-form-checkbox>
-            <div>
-                <b-button v-b-modal.modal-prevent-closing variant='danger'>Reportar</b-button>
+        </b-card-text>
+        <b-card-text>
+
+            <div v-if="comp>0">
+                <b-button v-b-modal.modal-prevent-closing variant='danger' v-if="reportesR==0">Reportar</b-button>
                 <b-modal id="modal-prevent-closing" ref="modal" title="Envie su reporte" @show="resetModal" @hidden="resetModal" @ok="handleOk">
                     <input type="text" id="txtReporte" class="fadeIn second" name="reporte" placeholder="Descripción reporte" required />
                 </b-modal>
+                 <b-button variant='danger' v-if="reportesR==1" @click="elimanarReporte()">Eliminar Reporte</b-button>
             </div>
+            
         </b-card-text>
 
     </b-card>
@@ -30,10 +41,15 @@ export default {
     data: () => ({
         subscripcion: [],
         status: 'not_accepted',
+        tienda: null,
+        comp:null,
+        reportesR:null
     }),
     mounted() {
         this.getSuscripcion();
-
+        this.getTienda();
+        this.comprasRealizadas();
+        this.reportesRealizados();
     },
     methods: {
         showModal() {
@@ -55,7 +71,10 @@ export default {
             objetoReporte.estado = 'A';
             objetoReporte.descripcion = document.getElementById('txtReporte').value;
             axios.post(process.env.VUE_APP_API_URL + "agregar_reporte", JSON.stringify(objetoReporte))
-                .then((respose) => {});
+                .then((respose) => {
+                        this.comprasRealizadas();
+                        this.reportesRealizados();
+                });
         },
 
         getSuscripcion() {
@@ -90,6 +109,45 @@ export default {
                     this.getSuscripcion();
                 });
             }
+        },
+        getTienda() {
+            axios.get(process.env.VUE_APP_API_URL + 'get_informacion_tienda/' + localStorage.getItem('id_tienda'))
+                .then((respose) => {
+                    this.tienda = respose.data;
+                    //this.getPhotoPreview();
+                })
+
+        },
+        comprasRealizadas(){
+            //alert('dd')
+              axios.get(process.env.VUE_APP_API_URL + 'get_reporteFactura/'+localStorage.getItem('comprador_id')+'/'+ localStorage.getItem('id_tienda'))
+                .then((respose) => {
+                    this.comp = respose.data.cantidad;
+                    
+                })       
+        },
+        reportesRealizados(){
+            //alert('dd')
+              axios.get(process.env.VUE_APP_API_URL + 'get_reportesRealizados/'+localStorage.getItem('comprador_id')+'/'+ localStorage.getItem('id_tienda'))
+                .then((respose) => {
+                    this.reportesR = respose.data.cantidad;
+                })       
+        },
+         elimanarReporte() {
+            self = this;
+            this.$alertify.confirm('¿Desea eliminar el reporte?',
+                function () {
+                    self.eliminar();
+                },
+                function () {});
+
+        },
+        eliminar(){
+            axios.delete(process.env.VUE_APP_API_URL + "eliminar_reporte/" +
+                    localStorage.getItem('comprador_id') + '/' +
+                    localStorage.getItem('id_tienda')).then((respose) => {
+                    this.reportesRealizados();
+                });
         }
     }
 }

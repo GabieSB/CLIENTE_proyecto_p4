@@ -3,7 +3,15 @@
     <h1>Listas de productos</h1>
     <div>
         <b-table striped hover :items="carrito">
-
+            <template #cell(Acciones)="data">
+                <!-- row para obtener datos de fila -->
+                <b-button size="sm" variant="danger" @click="eliminarProductoCarrito(data.value)">Eliminar
+                </b-button>
+            </template>
+            <template #cell(imagen)="data2">
+                <!-- row para obtener datos de fila -->
+                <b-img v-bind:src='data2.value' fluid alt="Fluid image" heigth=75 width=70></b-img>
+            </template>
         </b-table>
     </div>
     <b-row>
@@ -12,14 +20,23 @@
                 <h3>Formas de pago</h3>
             </label>
             <b-form-select id="fmPago" v-model="selected" :options="formaPago" class="mb-3"></b-form-select>
+
         </b-col>
         <b-col>
             <label>
                 <h3>Dirreción de envio</h3>
             </label>
-            <b-form-select id="selectFormaPago" v-model="selected2" :options="dirrecionEnvio" class="mb-3"></b-form-select>
+            <b-form-select id="dirrecion" v-model="selected2" :options="dirrecionEnvio" class="mb-3"></b-form-select>
         </b-col>
-        <b-button variant="danger" @click="comprar()">Comprar</b-button>
+
+    </b-row>
+    <b-row>
+        <b-col>
+            <input type="text" id="cvv" class="fadeIn second" name="cvv" placeholder="cvv" required /></b-col>
+        <b-col>
+            <b-button variant="danger" @click="comprar()">Comprar</b-button>
+        </b-col>
+
     </b-row>
 </div>
 </template>
@@ -37,7 +54,7 @@ export default {
         formaPago: [],
         selected2: null,
         dirrecionEnvio: [],
-        imagenes: []
+        //  imagenes: []
     }),
     mounted() {
         this.getCarrito();
@@ -48,18 +65,21 @@ export default {
         getCarrito() {
             axios.get(process.env.VUE_APP_API_URL + 'get_miCarrito/' + localStorage.getItem('comprador_id'))
                 .then((respose) => {
-                    this.imagenes = respose.data;
-                    this.getPhotoPreview();
+                    this.carrito = respose.data;
+                    //this.getPhotoPreview();
                     var aux = [];
                     var cont = 0;
                     for (var x of respose.data) {
                         var total = x.precio * x.cantidad;
+                        var va = this.getPhotoPreview(x.foto);
                         aux[cont] = {
                             Producto: x.nombre,
+                            imagen: va,
                             Descripción: x.descripcion,
                             ValorUnidad: x.precio,
                             Cantidad: x.cantidad,
-                            Total: total
+                            Total: total,
+                            Acciones: x.producto,
 
                         }
                         cont++;
@@ -116,21 +136,44 @@ export default {
 
                 });
         },
-        getPhotoPreview() {
-            for (var i = 0; i < this.imagenes.length; i++) {
-                if (this.imagenes[i].foto.length > 0) {
-                    this.imagenes[i].fotoSRC =
-                        process.env.VUE_APP_API_URL + "get_foto/" + this.imagenes[i].foto;
-                }
-            }
+        getPhotoPreview(x) {
+            return process.env.VUE_APP_API_URL + "get_foto/" + x;
         },
-        comprar(){
-              var formaPago = document.getElementById("fmPago").value
-                 axios.get(process.env.VUE_APP_API_URL + 'get_comprar/' + localStorage.getItem('comprador_id')+'/'+formaPago)
+        comprar() {
+            self = this;
+            this.$alertify.confirm('¿Desea comprar los productos?',
+                function () {
+                    self.realizarCompra()
+                },
+                function () {}
+            );
+        },
+        realizarCompra() {
+            var formaPago = document.getElementById("fmPago").value;
+            var cv = document.getElementById("cvv").value;
+            var dirrecion = document.getElementById("dirrecion").value;
+            // alert(dirrecion)
+            axios.get(process.env.VUE_APP_API_URL + 'get_comprar/' + localStorage.getItem('comprador_id') + '/' + formaPago + '/' + cv + '/' + dirrecion)
                 .then((respose) => {
+                    alert(respose.data)
+                    this.getCarrito();
                 })
+        },
+        eliminarProductoCarrito(idProducto) {
+            self = this;
+            this.$alertify.confirm('¿Desea eliminar el producto del carrito de compra?',
+                function () {
+                    self.eliminar(idProducto);
+                },
+                function () {});
+
+        },
+        eliminar(idProducto){
+            axios.delete(process.env.VUE_APP_API_URL + "eliminar_carrito/" +
+                        localStorage.getItem('comprador_id') + '/' + idProducto).then((respose) => {
+                        this.getCarrito();
+                    });
         }
-        
 
     }
 
