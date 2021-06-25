@@ -6,16 +6,7 @@
     </div>
 
     <div class="contenedor_productos" v-for="producto in productos" :key="producto.producto_id">
-        <!--b-card id="card" @click="irDescripcioProducto(producto.producto_id)" v-bind:title="producto.nombre" v-bind:img-src="producto.fotoSRC" img-alt="Image" img-height="250" img-width="250" img-top tag="article" style="max-width: 20rem" class="mb-2">
-            <b-card-text> Monto:{{producto.precio}} </b-card-text>
-            <template>
-                <div>
-                    <b-form-rating v-model="value"></b-form-rating>
-                    <p class="mt-2">Value:{{value}}</p>
-                </div>
-            </template>
-
-        </b-card-->
+   
         <b-card id='card-producto' @click="irDescripcioProducto(producto.producto_id)" v-bind:img-src="producto.fotoSRC" v-model="producto.producto_id" img-alt="Image" img-top tag="article" class="card mb-2">
             <h5 class="title">{{ producto.nombre }}</h5>
             <p style="width: 200px" class="detalle-producto">
@@ -121,31 +112,34 @@ export default {
                 }
             }
         },
-        getCategorias() {
-            axios
-                .get(process.env.VUE_APP_API_URL + "get_categorias2/1")
-                .then((response) => {
-                    var aux = [];
-                    aux[0] = {
-                        value: null,
-                        text: "Selecione una categoria"
-                    }
-                    var cont = 1;
-                    for (var x of response.data) {
-                        this.selected,
-                            aux[cont] = {
-                                value: x.categoria_id,
-                                text: x.categoria
-                            };
-                        console.log(this.aux);
-                        cont++;
-                    }
-                    console.log(this.aux);
-                    this.categorias = aux;
+       
+       getCategorias() {
+      console.log(this.tiendaId);
+      axios
+        .get(process.env.VUE_APP_API_URL + "get_categorias")
+        .then((response) => {
+          var aux = [];
+          aux[0] = {
+            value: null,
+            text: "Selecione una categoria",
+          };
+          var cont = 1;
+          for (var x of response.data) {
+            this.selected,
+              (aux[cont] = x);
+            cont++;
+          }
+          this.categorias = aux;
+        });
+    },
+    getFormatoFecha() {
 
-                });
-
-        },
+            for (var i = 0; i < this.productos.length; i++) {
+                let current_datetime = new Date(this.productos[i].fecha)
+                let formatted_date = current_datetime.getDate() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getFullYear()
+                this.productos[i].fechaFormater = formatted_date;
+            }
+        } 
     },
 };
 </script>
