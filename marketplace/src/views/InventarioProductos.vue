@@ -1,20 +1,20 @@
 <template>
 
 <div>
-  <Header></Header>
+  <HeaderTienda></HeaderTienda>
 
     <ProductosInventario></ProductosInventario>
 </div>
     
 </template>
 <script>
-import Header from "@/components/Header.vue";
+import HeaderTienda from "@/components/HeaderTienda.vue";
 import ProductosInventario from "@/components/ProductosInventario.vue"
 
 
 export default {
   components: {
-    Header,
+    HeaderTienda,
     ProductosInventario, 
   },
   data: () => ({

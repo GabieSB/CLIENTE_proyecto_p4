@@ -162,6 +162,11 @@ const routes = [
     name: 'reporteFactura',
     component: () => import('../views/ReporteFactura.vue')
   },
+  {
+    path: '/producto-tienda/:id',
+    name: 'productoTienda',
+    component: () => import('../views/ProductoTienda.vue')
+  },
   
 ];
 

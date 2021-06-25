@@ -1,11 +1,17 @@
 <template>
   <div>
-    <Header></Header>
+    <HeaderTienda></HeaderTienda>
     <SidebarComponent></SidebarComponent>
 
     <div class="container-fluid">
-      <div class="row">
+      <div class="row encabezado">
         <h1>Bienvenido: {{ this.nombreTienda }}</h1>
+        <div class="info">
+          <span><b>Usted tiene: </b></span>
+          <span> ❤ {{subscripciones}} subscriptores </span>
+          <span> 👎 {{denuncias}} denuncias  </span>
+          <span class="baneo" v-if="denuncias == 0"> <b>Su tienda fue baneada por tener más de 10 denuncias, los usuarios no podran ver más su tienda.</b>  </span>
+        </div>
       </div>
       <div class="row m-5">
         <b-card
@@ -98,7 +104,7 @@
   </div>
 </template>
 <script>
-import Header from "@/components/Header.vue";
+import HeaderTienda from "@/components/HeaderTienda.vue";
 import ModalSeleccionarFechas from "@/components/ModalSeleccionarFechas.vue";
 import SidebarComponent from "@/components/SidebarComponent.vue";
 
@@ -107,7 +113,7 @@ import axios from "axios";
 export default {
   name: "Dashboard",
   components: {
-    Header,
+    HeaderTienda,
     ModalSeleccionarFechas,
     SidebarComponent,
   },
@@ -116,9 +122,14 @@ export default {
     name: "",
     nameState: "",
     showModal: false,
+    tienda_id: "",
+    denuncias: "",
+    subscripciones: "",
   }),
   mounted() {
     this.getDataTienda();
+    this.getDenuncias()
+    this.getSubscripciones()
     localStorage.setItem("id_producto_edit", null);
   },
   methods: {
@@ -187,6 +198,8 @@ export default {
         .then((response) => {
           if (response.statusText == "OK") {
             localStorage.setItem("id_tienda", response.data.tienda_id); //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
+            this.tienda_id = response.data.tienda_id
+            console.log(response.data.tienda_id)
             this.nombreTienda = response.data.usuario_nombre_completo;
             console.log(
               "Se ha obtenido los datos de la tienda ID: " +
@@ -204,6 +217,52 @@ export default {
           }
         });
     },
+     getDenuncias() {
+       console.log(process.env.VUE_APP_API_URL + "get_denuncias_by_id/" + this.tienda_id)
+        axios
+        .get(process.env.VUE_APP_API_URL + "get_denuncias_by_id/" +  localStorage.getItem("id_tienda"))
+        .then((response) => {
+          this.denuncias = response.data[0]
+          
+        })
+        .catch((error) => {
+          
+          this.$alertify.error(error.response.data);
+        });
+
+    },
+    getSubscripciones() {
+      var url =
+        process.env.VUE_APP_API_URL +
+        "get_subscripciones_by_id/" +
+         localStorage.getItem("id_tienda")
+        console.log(url)
+      axios
+        .get(url)
+        .then((response) => {
+          this.subscripciones = response.data.length
+        })
+        .catch((error) => {});
+    },
   },
 };
 </script>
+
+<style scoped>
+.encabezado{
+  border: solid 2px rgb(5, 155, 255);
+  margin:  10px 0;
+  border-radius: 15px;
+  padding: 5px;
+}
+.info{
+  display: flex;
+  flex-direction: column;
+  margin-left:10px ;
+}
+.baneo{
+  color: red;
+
+}
+
+</style>

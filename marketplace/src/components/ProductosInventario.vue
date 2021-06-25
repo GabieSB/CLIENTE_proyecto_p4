@@ -39,12 +39,14 @@
         img-top
         tag="article"
         class="card mb-2"
+       
       >
-        <h5 class="title">{{ producto.nombre }}</h5>
+      <div  @click="goProducto(producto.producto_id)" >
+         <h5 class="title">{{ producto.nombre }}</h5>
         <p style="width: 200px" class="detalle-producto">
           {{ producto.descripcion }}
         </p>
-        <div class="data-producto my-1">
+        <div   class="data-producto my-1">
           <b-card-text class="detalle-producto">
             Precio: ₡{{ producto.precio }}
           </b-card-text>
@@ -58,10 +60,10 @@
             Costo envio: ₡{{ producto.cost_envio }}
           </b-card-text>
           <b-card-text v-if="producto.oferta > 0" class="detalle-producto">
-            Precio oferta:{{ producto.oferta }}
+            Precio oferta:  ₡{{ producto.oferta }}
           </b-card-text>
         </div>
-        <b-form-rating
+           <b-form-rating
           variant="warning"
           v-model="producto.calificacion"
           readonly
@@ -75,6 +77,8 @@
         </p>
         <small class="text-muted">Publicado: {{ producto.publicacion }}</small>
 
+      </div>
+      
         <div class="actions">
           <div>
             <b-button
@@ -116,6 +120,7 @@
           no-body
           class="overflow-hidden my-2 deseos"
           style="max-width: 540px"
+         
         >
           <b-row no-gutters class="d-flex py-2">
             <b-col md="1">
@@ -239,11 +244,11 @@ export default {
         .then((response) => {
           
           this.getProductos();
-          this.$alertify.success(data.data);
+          this.$alertify.success(response.data);
         })
         .catch((error) => {
           console.log(error);
-          this.$alertify.success(error);
+          this.$alertify.error("Hubo problemas al eliminar el producto");
 
 
         });
@@ -278,6 +283,10 @@ export default {
     goPerfil(id) {
       localStorage.setItem("id_perfil", id);
       this.$router.push("comprador/" + id);
+    },
+    goProducto(id){
+      console.log(id)
+        this.$router.push("producto-tienda/" + id);
     },
     resetModal() {
       this.deseos = [];
