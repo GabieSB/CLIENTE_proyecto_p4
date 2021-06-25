@@ -257,6 +257,7 @@ export default {
     },
     chargeProfilePic() {
       this.fotoPerfil = this.$refs.profilePic.files[0];
+      this.showPreview(this.fotoPerfil);
     },
     changePasswState() {
       this.$refs.passwordInput.disabled = !this.$refs.passwCKB.checked;
@@ -282,6 +283,17 @@ export default {
     exit() {
       localStorage.removeItem("userId");
       this.$router.back();
+    },
+
+    showPreview(file) {
+      if (file) {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        let self = this;
+        fileReader.addEventListener("load", function () {
+          self.$refs.profPic.src = this.result;
+        });    
+      }
     },
   },
 };
@@ -349,9 +361,7 @@ input {
   position: relative;
   border-radius: 100px;
   height: 150px;
-  width: 150px;
-  top: 25%;
-  left: 33%;
+  width: 150px; 
 }
 
 .action-buttons {

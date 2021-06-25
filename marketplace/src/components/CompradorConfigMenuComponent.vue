@@ -67,8 +67,8 @@ export default {
 }
 
 .internal-button-container {
-  position: absolute;
-  top: 40%;
+  position: relative;
+  transform: translateY(100%);
   left: 15%;
 }
 

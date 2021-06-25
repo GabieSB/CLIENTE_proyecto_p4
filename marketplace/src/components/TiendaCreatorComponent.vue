@@ -22,8 +22,8 @@
       <div class="col-sm-4" style="background-color: #f5f5f5">
         <img
           class="profile-pic"
-          src="https://xn--diseoscreativos-1qb.com/wp-content/uploads/2018/06/Imagenes-de-gatos-www.dise%C3%B1oscreativos.com-portada-3-1.jpg"
           alt="foto de perfil"
+          ref="profPic"
         />
         <input
           id="picSelector"
@@ -52,6 +52,11 @@ export default {
     detalles: "",
     fotoPerfil: undefined,
   }),
+
+  mounted(){
+    this.$refs.profPic.src = process.env.VUE_APP_API_URL + "/get_foto/profiles/unknow.jpg"
+  },
+
   methods: {
     buildUserData() {
       let lastData = JSON.parse(localStorage.getItem('userData'));
@@ -101,6 +106,18 @@ export default {
 
     chargeProfilePic() {
       this.fotoPerfil = this.$refs.profilePic.files[0];
+      this.showPreview(this.fotoPerfil);
+    },
+
+    showPreview(file) {
+      if (file) {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        let self = this;
+        fileReader.addEventListener("load", function () {
+          self.$refs.profPic.src = this.result;
+        });    
+      }
     },
   },
 };
