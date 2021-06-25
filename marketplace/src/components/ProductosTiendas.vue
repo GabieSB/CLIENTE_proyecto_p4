@@ -73,8 +73,6 @@ export default {
 
         irDescripcioProducto(idProducto) {
             localStorage.setItem("id_producto", idProducto);
-            //this.$router.push(() => {});
-            // this.$router.push("ProductosDescripcion").catch(err=>{});
             this.$router.push("ProductosDescripcion")
 
         },
