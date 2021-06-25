@@ -267,8 +267,6 @@ export default {
         this.modalShow = false
         this.getOfertas()
       }
-      
-    
 
     },
     cerrar() {

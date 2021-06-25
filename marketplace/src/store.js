@@ -13,6 +13,7 @@ export default new Vuex.Store({
     tienda:null,
     producto:null,
     itemsReporteVentas: null,
+    resultadoRuleta: "", 
   },
   plugins: [createPersistedState()],
   mutations: {
