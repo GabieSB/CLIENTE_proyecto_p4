@@ -42,13 +42,13 @@
 <script>
 import Header from "@/components/Header.vue";
 import axios from "axios";
-import BarChart from "@/components/BarChart.vue";
+
 
 export default {
   name: "ReporteSubscripciones",
   components: {
     Header,
-    BarChart,
+    
   },
   data: () => ({
     idComprador: "",
