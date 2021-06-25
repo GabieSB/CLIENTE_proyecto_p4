@@ -81,8 +81,6 @@ export default {
                this.$router.push("dashboardComprador");
                this.getComprador();
             }else{
-                
-            
               this.$router.push("dashboardTienda");
             }
           }
@@ -108,14 +106,11 @@ export default {
     },
     getComprador() {
             var idUsuario = localStorage.getItem('usuario_id');
-                 axios.get(process.env.VUE_APP_API_URL + 'get_comprador/' + idUsuario)
+                 axios.get(process.env.VUE_APP_API_URL + 'get_comprador2/' + idUsuario)
                      .then((respose) => {
                         
                          var cont = respose.data;
-                      localStorage.setItem('comprador_id',cont[0].comprador_id);
-               //   alert(localStorage.getItem('comprador_id'));
-                       //console.log(x);
-                      
+                      localStorage.setItem('comprador_id',cont[0].comprador_id);              
                      }) 
              },
   },
