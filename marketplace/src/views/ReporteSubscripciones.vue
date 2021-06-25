@@ -45,15 +45,15 @@ import axios from "axios";
 import BarChart from "@/components/BarChart.vue";
 
 export default {
-    name: "ReporteSubcripciones",
-    components: {
-        Header,
-        BarChart,
-    },
-    data: () => ({
-        idComprador: "",
-        subscripciones: [],
-        fields: ["nombre_tienda", "productos_deseados"],
+  name: "ReporteSubscripciones",
+  components: {
+    Header,
+    BarChart,
+  },
+  data: () => ({
+    idComprador: "",
+    subscripciones: [],
+    fields: ["nombre_tienda", "productos_deseados"],
 
         items: [],
         itemsChart: [],
