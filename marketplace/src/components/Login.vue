@@ -8,29 +8,14 @@
             <img src="https://ambitioustracks.com/wp-content/uploads/2017/01/1.-fundadores.png" id="icon" alt="User Icon" />
         </div>
 
-      <!-- Login Form -->
-      <form v-on:submit.prevent="login">
-        <input
-          type="text"
-          id="login"
-          class="fadeIn second"
-          name="usuario"
-          placeholder="Usuario"
-          v-model="usuario"
-          required
-        />
-        <input
-          type="text"
-          id="password"
-          class="fadeIn third"
-          name="login"
-          placeholder="Password"
-          v-model="password"
-          required        />
+        <!-- Login Form -->
+        <form v-on:submit.prevent="login">
+            <input type="text" id="login" class="fadeIn second" name="usuario" placeholder="Usuario" v-model="usuario" required />
+            <input type="text" id="password" class="fadeIn third" name="login" placeholder="Password" v-model="password" required />
 
-          <input type="submit" value="Login">
-        
-      </form>
+            <input type="submit" value="Login">
+
+        </form>
 
         <!-- Remind Passowrd -->
         <div id="formFooter" v-if="error">
@@ -38,82 +23,84 @@
         </div>
     </div>
     <a id="registration_link" v-on:click='goToRegistration'>--Aun no tengo una cuenta--</a>
-  </div>
+</div>
 </template>
 
 <script>
-
 import axios from "axios";
-import { main } from "../main.js";
+import {
+    main
+} from "../main.js";
 
 // @ is an alias to /src
 export default {
 
-  name: "Login",
-  components: {
-    
-  },
+    name: "Login",
+    components: {
 
-  data: () => ({
-    usuario: "",
-    password: "",
-    error: false,
-  }),
-
-  methods: {
-    onClick() {
-      console.log("Vue 2");
     },
-    login() {
-      console.log(this.usuario);
 
-      axios
-        .get(process.env.VUE_APP_API_URL+ "login/" + this.usuario + "/" + this.password )
-        .then((data) => {
-        
-          if (data.statusText == "OK") {
-            localStorage.setItem('id_user', data.data.usuario_id)  //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
-            this.$store.state.usuario = data.data;
-            console.log(this.$store.state.usuario)
-            if(data.data.usuario_tipo == 'C'){
-                localStorage.setItem('usuario_id',data.data.usuario_id);
-                console.log(localStorage.getItem('usuario_id'));
-               this.$router.push("dashboardComprador");
-               this.getComprador();
-            }else{
-              this.$router.push("dashboardTienda");
-            }
-          }
-        }).catch((error)=>{
+    data: () => ({
+        usuario: "",
+        password: "",
+        error: false,
+    }),
 
-          if(error.response)
-          {
-            if(error.response.status == 500 || error.response.status == 404 ){
-              this.$alertify.error('Han surgido problemas para conectarse con el servidor. Inténtelo más tarde.')
-            }else{
-              this.$alertify.error(error.response.data)
-            }
-          } else {
-            this.$alertify.error('No se ha podido establecer conexión con el servidor.')
-          }
-          this.password = '';
-          this.usuario = '';
-        });
-    },
-    goToRegistration(){
-      localStorage.removeItem('userData');
-      this.$router.push("userCreator");
-    },
-    getComprador() {
+    methods: {
+        onClick() {
+            console.log("Vue 2");
+        },
+        login() {
+            console.log(this.usuario);
+
+            axios
+                .get(process.env.VUE_APP_API_URL + "login/" + this.usuario + "/" + this.password)
+                .then((data) => {
+
+                    if (data.statusText == "OK") {
+                        localStorage.setItem('id_user', data.data.usuario_id) //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
+                        this.$store.state.usuario = data.data;
+                        console.log(this.$store.state.usuario)
+                        if (data.data.usuario_tipo == 'C') {
+                            localStorage.setItem('modo_usuario','t');
+                            localStorage.setItem('usuario_id', data.data.usuario_id);
+                            console.log(localStorage.getItem('usuario_id'));
+                            this.$router.push("dashboardComprador");
+                            this.getComprador();
+                        } else {
+                            localStorage.setItem('modo_usuario','c');
+                            this.$router.push("dashboardTienda");
+                        }
+                    }
+                }).catch((error) => {
+
+                    if (error.response) {
+                        if (error.response.status == 500 || error.response.status == 404) {
+                            this.$alertify.error('Han surgido problemas para conectarse con el servidor. Inténtelo más tarde.')
+                        } else {
+                            this.$alertify.error(error.response.data)
+                        }
+                    } else {
+                        this.$alertify.error('No se ha podido establecer conexión con el servidor.')
+                    }
+                    this.password = '';
+                    this.usuario = '';
+                });
+        },
+        goToRegistration() {
+            localStorage.removeItem('userData');
+            this.$router.push("userCreator");
+        },
+        getComprador() {
             var idUsuario = localStorage.getItem('usuario_id');
-                 axios.get(process.env.VUE_APP_API_URL + 'get_comprador2/' + idUsuario)
-                     .then((respose) => {
-                        
-                         var cont = respose.data;
-                      localStorage.setItem('comprador_id',cont[0].comprador_id);              
-                     }) 
-             },
-  },
+            axios.get(process.env.VUE_APP_API_URL + 'get_comprador2/' + idUsuario)
+                .then((respose) => {
+
+                    var cont = respose.data;
+                    localStorage.setItem('comprador_id', cont[0].comprador_id);
+                })
+        },
+    },
 };
 </script>
 
@@ -136,14 +123,14 @@ a {
 }
 
 #registration_link {
-  transition: 200ms;
-  color: #2196F3;
+    transition: 200ms;
+    color: #2196F3;
 }
 
 #registration_link:hover {
-  color: #9C27B0;
-  font-weight: bold;
-  
+    color: #9C27B0;
+    font-weight: bold;
+
 }
 
 h2 {

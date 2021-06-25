@@ -94,7 +94,7 @@ export default {
     //this.endDate = new Date().toISOString().split("T")[0];
     //aux.setDate(aux.getDate() - 10);
     //this.startDate = aux.toISOString().split("T")[0];
-    this.facturaId = 1;
+    this.facturaId = localStorage.getItem('factura_id');
     this.getFormatoFechaHoras();
     this.getFactura();
   },

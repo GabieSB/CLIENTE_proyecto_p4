@@ -136,15 +136,15 @@ export default {
             return process.env.VUE_APP_API_URL + "get_foto/" + x;
         },
         comprar() {
-          
-                self = this;
-                this.$alertify.confirm('¿Desea comprar los productos?',
-                    function () {
-                        self.realizarCompra()
-                    },
-                    function () {}
-                );
-            
+
+            self = this;
+            this.$alertify.confirm('¿Desea comprar los productos?',
+                function () {
+                    self.realizarCompra()
+                },
+                function () {}
+            );
+
         },
         realizarCompra() {
 
@@ -153,8 +153,16 @@ export default {
             var dirrecion = document.getElementById("dirrecion").value;
             axios.get(process.env.VUE_APP_API_URL + 'get_comprar/' + localStorage.getItem('comprador_id') + '/' + formaPago + '/' + cv + '/' + dirrecion)
                 .then((respose) => {
-                    alert(respose.data)
+                    //  alert(respose.data)
+
+                    localStorage.setItem('factura_id', respose.data[1])
                     this.getCarrito();
+                  
+                    let routeUrl = this.$router.resolve({
+                        path: "/reporte-factura",
+                    });
+
+                    window.open(routeUrl.href, '_blank');
                 })
         },
         eliminarProductoCarrito(idProducto) {

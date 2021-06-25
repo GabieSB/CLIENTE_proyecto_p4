@@ -150,7 +150,7 @@ export default {
     fecha: ""
   }),
   mounted() {
-    this.idComprador = 1;
+    this.idComprador =localStorage.getItem('comprador_id');
     var aux = new Date();
     this.endDate = new Date().toISOString().split("T")[0];
     aux.setDate(aux.getDate() - 10);
