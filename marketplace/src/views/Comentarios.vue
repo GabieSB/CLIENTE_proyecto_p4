@@ -1,10 +1,11 @@
 <template>
   <div>
-    <Header></Header>
+    <HeaderTienda></HeaderTienda>
     <div class="container">
       <div class="row d-flex justify-content-center">
         <h1 class="tittle my-3">Comentarios sin responder</h1>
       </div>
+      <h2 class="my-3" v-if="comentarios.length==0">No tienes comentarios sin responder</h2>
       <div
         class="row d-flex justify-content-center"
         v-for="comentario in comentarios"
@@ -33,7 +34,7 @@
 
             </div>
               
-              <b-button @click.prevent="goPerfil(comentario.comprador_id)" variant="outline-dark"
+              <b-button @click.prevent="goPerfil(comentario.producto_id)" variant="outline-dark"
                 >Responder</b-button
               >
             </b-col>
@@ -45,12 +46,12 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
+import HeaderTienda from "@/components/HeaderTienda.vue";
 import axios from "axios";
 export default {
   name: "Comentarios",
   components: {
-    Header,
+    HeaderTienda,
   },
   data: () => ({
     idTienda: '',
@@ -85,11 +86,19 @@ export default {
         .catch((error) => {});
     },
     goPerfil(id) {
-     // localStorage.setItem("id_perfil", id);
-      this.$router.push("comprador/" + id);
+     this.$router.push("producto-tienda/" + id);
     },
   },
 };
 
 
 </script>
+
+
+<style>
+
+img{
+  width: 100px;
+  height: 60px;
+}
+</style>

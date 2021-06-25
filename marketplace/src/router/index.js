@@ -152,9 +152,21 @@ const routes = [
     name: 'reporteSubscripciones',
     component: () => import('../views/ReporteSubscripciones.vue')
   },
-  
-
-  
+  {
+    path: '/reporte-ofertas/',
+    name: 'reporteOfertas',
+    component: () => import('../views/ReporteOfertas.vue')
+  },
+  {
+    path: '/reporte-factura/',
+    name: 'reporteFactura',
+    component: () => import('../views/ReporteFactura.vue')
+  },
+  {
+    path: '/producto-tienda/:id',
+    name: 'productoTienda',
+    component: () => import('../views/ProductoTienda.vue')
+  },
   
 ];
 

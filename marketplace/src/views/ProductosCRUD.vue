@@ -302,7 +302,7 @@ export default {
       }
     },
     create_product(event){
-      console.log('editabdi')
+  
       this.form.id = this.$store.state.tienda.tienda_id;
 
       let param = new FormData();
