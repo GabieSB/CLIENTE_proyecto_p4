@@ -14,7 +14,7 @@
                 <nav class="mb-3">
                     <b-nav vertical v-if="tipoUsuario!='c'">
                         <b-button @click="goReporteCompras()">Reporte Compras</b-button>
-                        <b-button @click="goReporteSuscripciones()">Reporte Suscripciones</b-button>
+                        <b-button @click="goReporteSuscripciones()">Reporte Subscripciones</b-button>
                         <b-button @click="goReporteOfertas()">Reporte ofertas</b-button>
                     </b-nav>
                 </nav>
@@ -92,7 +92,7 @@ export default {
         goReporteSuscripciones() {
 
             let routeUrl = this.$router.resolve({
-                path: "/reporte-suscripciones",
+                path: "/reporte-subscripciones",
             });
             window.open(routeUrl.href, '_blank');
         },
