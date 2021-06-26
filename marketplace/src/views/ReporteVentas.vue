@@ -64,9 +64,7 @@
         </b-form-group>
       </form>
       <div class="actions">
-        <b-button class="mt-2" variant="info" block
-          >Generar de ventas del día</b-button
-        >
+       
         <b-button class="mt-2" variant="primary" @click="generar" block
           >Generar</b-button
         >
