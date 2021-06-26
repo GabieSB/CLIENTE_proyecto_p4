@@ -188,8 +188,6 @@ export default {
             });
         },
         goHome(){
-          
-                localStorage.removeItem('comprador_id')
             this.$router.push('/')
         
             
