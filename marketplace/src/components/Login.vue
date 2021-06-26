@@ -1,26 +1,22 @@
 <template>
 <div class="wrapper fadeInDown">
+    <img class="logo" src="../assets/marketplace.png" alt="" />
+    <h2>Bienvenido a marketplace</h2>
     <div id="formContent">
-        <!-- Tabs Titles -->
-
-        <!-- Icon -->
+       
         <div class="fadeIn first">
             <img src="https://ambitioustracks.com/wp-content/uploads/2017/01/1.-fundadores.png" id="icon" alt="User Icon" />
         </div>
 
-        <!-- Login Form -->
+    
         <form v-on:submit.prevent="login">
             <input type="text" id="login" class="fadeIn second" name="usuario" placeholder="Usuario" v-model="usuario" required />
-            <input type="text" id="password" class="fadeIn third" name="login" placeholder="Password" v-model="password" required />
+            <input type="password" id="password" class="fadeIn third" name="login" placeholder="Password" v-model="password" required />
 
             <input type="submit" value="Login">
 
         </form>
 
-        <!-- Remind Passowrd -->
-        <div id="formFooter" v-if="error">
-            <a class="underlineHover" href="#">Forgot Password?</a>
-        </div>
     </div>
     <a id="registration_link" v-on:click='goToRegistration'>--Aun no tengo una cuenta--</a>
 </div>
@@ -106,6 +102,7 @@ export default {
 
 <style>
 /* aqui van los estilos */
+
 html {
     background-color: #56baed;
 }
@@ -120,6 +117,11 @@ a {
     display: inline-block;
     text-decoration: none;
     font-weight: 400;
+}
+
+.logo{
+    height: 100px;
+    width: 100px;
 }
 
 #registration_link {
@@ -158,7 +160,7 @@ h2 {
 #formContent {
     -webkit-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
-    background: #fff;
+    background: rgb(0, 177, 151);
     padding: 30px;
     width: 90%;
     max-width: 450px;
@@ -231,7 +233,7 @@ input[type="reset"]:active {
     transform: scale(0.95);
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
     background-color: #f6f6f6;
     border: none;
     color: #0d0d0d;
@@ -252,12 +254,12 @@ input[type="text"] {
     border-radius: 5px 5px 5px 5px;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus,  input[type="password"]:focus{
     background-color: #fff;
     border-bottom: 2px solid #5fbae9;
 }
 
-input[type="text"]:placeholder {
+input[type="text"]:placeholder, input[type="password"]:focus {
     color: #cccccc;
 }
 

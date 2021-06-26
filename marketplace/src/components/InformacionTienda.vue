@@ -111,6 +111,7 @@ export default {
             }
         },
         getTienda() {
+            console.log(process.env.VUE_APP_API_URL + 'get_informacion_tienda/' + localStorage.getItem('id_tienda'))
             axios.get(process.env.VUE_APP_API_URL + 'get_informacion_tienda/' + localStorage.getItem('id_tienda'))
                 .then((respose) => {
                     this.tienda = respose.data;

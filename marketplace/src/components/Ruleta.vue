@@ -19,7 +19,7 @@
                 value="GIRAR RULETA"
                 id="spin"
                 v-on:click="spin"
-                v-if="girar"
+                v-if="girar < 3"
               />
               <h2 class="my-3" v-else>Mañana podrás jugar de nuevo. 😃</h2>
             </div>
@@ -188,7 +188,7 @@ export default {
       this.spinTime = 0;
       this.spinTimeTotal = Math.random() * 3 + 4 * 1000;
       this.rotateWheel();
-      this.girar = false;
+      this.girar++;
     },
 
     rotateWheel: function () {
@@ -312,6 +312,7 @@ export default {
         });
     },
     getFormasPago() {
+      console.log( "get_formaPago/" + localStorage.getItem("comprador_id"))
       axios
         .get(
           process.env.VUE_APP_API_URL +

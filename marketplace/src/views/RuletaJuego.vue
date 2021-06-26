@@ -1,7 +1,8 @@
 <template>
  <div>
    <Header></Header>
-   <Ruleta :girar="giros < 4"  ></Ruleta>
+   <SidebarComponent></SidebarComponent>
+   <Ruleta :girar="giros"  ></Ruleta>
 
  </div>
 
@@ -11,10 +12,12 @@
 import Ruleta from "@/components/Ruleta.vue";
 import axios from "axios";
 import Header from "@/components/Header.vue";
+import SidebarComponent from "@/components/SidebarComponent.vue"
 export default {
   components: {
     Ruleta,
-    Header
+    Header,
+    SidebarComponent
   },
   data: () => ({
       comprador_id : "",

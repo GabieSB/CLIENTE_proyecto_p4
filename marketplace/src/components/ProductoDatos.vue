@@ -213,7 +213,9 @@ export default {
       axios
         .get(process.env.VUE_APP_API_URL + "get_comentario2/" + this.id)
         .then((respose) => {
+          
           this.comentarios = respose.data;
+        console.log(this.comentarios)
           this.convertirFechaComentarios();
           this.getFotosUsuarios();
 
@@ -235,8 +237,10 @@ export default {
             process.env.VUE_APP_API_URL +
             "get_foto/profiles/" +
             this.comentarios[i].foto_tienda;
-          console.log(this.comentarios[i].fotoSRC);
+          
         }
+
+     
       }
     },
     getFormatoFecha() {

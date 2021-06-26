@@ -114,8 +114,6 @@ export default {
   name: "ReporteVentas",
   components: {
     Header,
-   
-
   },
   data: () => ({
     idTienda: "",

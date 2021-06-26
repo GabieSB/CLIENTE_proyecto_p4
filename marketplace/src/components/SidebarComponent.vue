@@ -16,6 +16,7 @@
                         <b-button @click="goReporteCompras()">Reporte Compras</b-button>
                         <b-button @click="goReporteSuscripciones()">Reporte Subscripciones</b-button>
                         <b-button @click="goReporteOfertas()">Reporte ofertas</b-button>
+                        <b-button @click="goRuleta()">Jugar a la ruleta</b-button>
                     </b-nav>
                 </nav>
                 <b-button variant="primary" block @click="hide">Close Sidebar</b-button>
@@ -102,6 +103,10 @@ export default {
                 path: "/reporte-ofertas",
             });
             window.open(routeUrl.href, '_blank');
+        },
+        goRuleta() {
+
+           this.$router.push('ruleta')
         }
     }
 };
