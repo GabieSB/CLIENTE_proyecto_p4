@@ -169,7 +169,7 @@ export default {
 
     safeDelete(id) {
       self = this;
-      this.$alertify.confirm('¿Desea eliminar esta dirección de envio?',
+      this.$alertify.confirm('¿Desea eliminar esta dirección de envío?',
         function(){
           self.delete(id);
         },

@@ -1,163 +1,168 @@
 <template>
-  <form class="container-fluid" v-on:submit.prevent="saveChanges">
-    <h1 class="main-tittle">
-      Datos de tu tienda
-      <div class="main-button-container">
-        <b-button class="action-buttons" variant="success" type="submit">Guardar cambios</b-button>
-        <b-button class="action-buttons" @click="exit()">Cancelar</b-button>
-        <b-button class="action-buttons" variant="danger">Eliminar mi cuenta</b-button>
-      </div>
-    </h1>
-    <div class="row" v-on:submit.prevent="saveData">
-      <div class="col-sm-7" style="background-color: #f5f5f5">
-        <div>
-          <label class="inputLabel" for="cedula"
-            >Cédula juridica</label
-          >
+  <div>
+    <form class="container-fluid" v-on:submit.prevent="saveChanges">
+      <h1 class="main-tittle">
+        Datos de tu tienda
+        <div class="main-button-container">
+          <b-button class="action-buttons" variant="success" type="submit">Guardar cambios</b-button>
+          <b-button class="action-buttons" @click="openSocialModal()">Redes Sociales</b-button>
+          <b-button class="action-buttons" @click="exit()">Cancelar</b-button>
         </div>
-        <input
-          id="cedula"
-          class="form-control input-sm"
-          type="text"
-          placeholder="Ingresa la cédula jurídica de ti tienda"
-          required
-          v-model="cedula"
-          maxlength="64"
-        />
+      </h1>
+      <div class="row" v-on:submit.prevent="saveData">
+        <div class="col-sm-7" style="background-color: #f5f5f5">
+          <div>
+            <label class="inputLabel" for="cedula">Cédula juridica</label>
+          </div>
+          <input
+            id="cedula"
+            class="form-control input-sm"
+            type="text"
+            placeholder="Ingresa la cédula jurídica de ti tienda"
+            required
+            v-model="cedula"
+            maxlength="64"
+          />
 
-        <div>
-          <label class="inputLabel" for="nombreCompleto"
-            >Nombre de tu tienda</label
-          >
+          <div>
+            <label class="inputLabel" for="nombreCompleto"
+              >Nombre de tu tienda</label
+            >
+          </div>
+          <input
+            id="nombreCompleto"
+            type="text"
+            placeholder="Ingresael de tu tienda"
+            required
+            v-model="nombreCompleto"
+            maxlength="128"
+          />
+
+          <div>
+            <label class="inputLabel" for="correo">Correo electrónico</label>
+          </div>
+          <input
+            id="correo"
+            type="text"
+            placeholder="Ingresa el correo electrónico de tu tienda"
+            required
+            v-model="email"
+            maxlength="32"
+          />
+
+          <div><label class="inputLabel" for="telefono">Teléfono</label></div>
+          <input
+            id="telefono"
+            type="text"
+            placeholder="Ingresa el teléfono tu tienda"
+            required
+            v-model="telefono"
+            maxlength="16"
+          />
+
+          <div>
+            <label class="inputLabel" for="usuario">Nombre de usuario</label>
+          </div>
+          <input
+            id="usuario"
+            type="text"
+            placeholder="Ingresa aquí el nombre de usuario"
+            required
+            v-model="usuario"
+            maxlength="32"
+          />
+
+          <div>
+            <label class="inputLabel" for="password"
+              >Cambiar contraseña
+              <input
+                ref="passwCKB"
+                type="checkbox"
+                checked
+                @change="changePasswState()"
+              />
+            </label>
+          </div>
+          <input
+            class="passwordInput"
+            ref="passwordInput"
+            id="password"
+            type="password"
+            placeholder="Ingresa una contraseña segura"
+            required
+            v-model="password"
+            maxlength="24"
+          />
         </div>
-        <input
-          id="nombreCompleto"
-          type="text"
-          placeholder="Ingresael de tu tienda"
-          required
-          v-model="nombreCompleto"
-          maxlength="128"
-        />
-
-        <div>
-          <label class="inputLabel" for="correo">Correo electrónico</label>
-        </div>
-        <input
-          id="correo"
-          type="text"
-          placeholder="Ingresa el correo electrónico de tu tienda"
-          required
-          v-model="email"
-          maxlength="32"
-        />
-
-        <div><label class="inputLabel" for="telefono">Teléfono</label></div>
-        <input
-          id="telefono"
-          type="text"
-          placeholder="Ingresa el teléfono tu tienda"
-          required
-          v-model="telefono"
-          maxlength="16"
-        />
-
-        <div>
-          <label class="inputLabel" for="usuario">Nombre de usuario</label>
-        </div>
-        <input
-          id="usuario"
-          type="text"
-          placeholder="Ingresa aquí el nombre de usuario"
-          required
-          v-model="usuario"
-          maxlength="32"
-        />
-
-        <div>
-          <label class="inputLabel" for="password"
-            >Cambiar contraseña
+        <div class="col-sm-5" style="background-color: #f5f5f5">
+          <div class="col-sm-12 sub-group">
+            <h4>Datos de dirección</h4>
             <input
-              ref="passwCKB"
-              type="checkbox"
-              checked
-              @change="changePasswState()"
+              maxlength="32"
+              id="pais"
+              type="text"
+              placeholder="País"
+              required
+              v-model="pais"
             />
-          </label>
-        </div>
-        <input
-          class="passwordInput"
-          ref="passwordInput"
-          id="password"
-          type="password"
-          placeholder="Ingresa una contraseña segura"
-          required
-          v-model="password"
-          maxlength="24"
-        />
-      </div>
-      <div class="col-sm-5" style="background-color: #f5f5f5">
-        <div class="col-sm-12 sub-group">
-          <h4>Datos de dirección</h4>
-          <input
-            maxlength="32"
-            id="pais"
-            type="text"
-            placeholder="País"
-            required
-            v-model="pais"
-          />
-          <input
-            maxlength="32"
-            id="provincia"
-            type="text"
-            placeholder="Provincia"
-            required
-            v-model="provincia"
-          />
-          <input
-            maxlength="32"
-            id="canton"
-            type="text"
-            placeholder="Cantón"
-            required
-            v-model="canton"
-          />
-        </div>
+            <input
+              maxlength="32"
+              id="provincia"
+              type="text"
+              placeholder="Provincia"
+              required
+              v-model="provincia"
+            />
+            <input
+              maxlength="32"
+              id="canton"
+              type="text"
+              placeholder="Cantón"
+              required
+              v-model="canton"
+            />
+          </div>
 
-        <div>
-          <label class="inputLabel" for="descripcion"
-            >Detalles sobre tu tienda</label
-          >
-        </div>
-        <textarea
-          name="descripcion"
-          id="descripcion"
-          cols="67"
-          rows="3"
-          placeholder="Escribe aquí los detalles sobre tu tienda"
-          v-model="detalles"
-        ></textarea>
-        <div class="sub-group">
-          <h4>Foto de perfil</h4>
-          <img class="profile-pic" ref="profPic" alt="foto de perfil" />
-          <input
-            id="picSelector"
-            type="file"
-            accept=".png, .jpg, .jpge"
-            v-on:change="chargeProfilePic"
-            ref="profilePic"
-          />
+          <div>
+            <label class="inputLabel" for="descripcion"
+              >Detalles sobre tu tienda</label
+            >
+          </div>
+          <textarea
+            name="descripcion"
+            id="descripcion"
+            cols="67"
+            rows="3"
+            placeholder="Escribe aquí los detalles sobre tu tienda"
+            v-model="detalles"
+          ></textarea>
+          <div class="sub-group">
+            <h4>Foto de perfil</h4>
+            <img class="profile-pic" ref="profPic" alt="foto de perfil" />
+            <input
+              id="picSelector"
+              type="file"
+              accept=".png, .jpg, .jpge"
+              v-on:change="chargeProfilePic"
+              ref="profilePic"
+            />
+          </div>
         </div>
       </div>
-    </div>
-  </form>
+    </form>
+    <EditRedesSocialesComponent ref="modalComponet"></EditRedesSocialesComponent>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
+import EditRedesSocialesComponent from "@/components/EditRedesSocialesComponent.vue"
 
 export default {
   setup() {},
+  components:{
+    EditRedesSocialesComponent,
+  },
 
   name: "UserEditorComponent",
 
@@ -184,6 +189,7 @@ export default {
   },
 
   methods: {
+
     getEditionData(id) {
       axios
         .get(process.env.VUE_APP_API_URL + "get_tienda_data_by_user_id/" + id)
@@ -200,10 +206,11 @@ export default {
         });
     },
 
+
     deployEditableData(responseData) {
-      this.usuario_id = responseData['usuario_id'];
-      this.tienda_id = responseData['tienda_id'];
-      this.direccion_id = responseData['direccion_id'];
+      this.usuario_id = responseData["usuario_id"];
+      this.tienda_id = responseData["tienda_id"];
+      this.direccion_id = responseData["direccion_id"];
       this.email = responseData["usuario_email"];
       this.telefono = responseData["usuario_telefono"];
       this.cedula = responseData["usuario_cedula"];
@@ -217,12 +224,14 @@ export default {
       this.nombreFoto = responseData["usuario_foto"];
     },
 
+
     saveChanges() {
       let form = new FormData();
       form.append("string_data", JSON.stringify(this.buildTiendaData()));
       form.append("file", this.fotoPerfil ? this.fotoPerfil : null);
       this.updateData(form);
     },
+
 
     updateData(formData) {
       axios
@@ -240,6 +249,7 @@ export default {
         });
     },
 
+
     proccessAxiosError(error) {
       if (error.response) {
         if (error.response.status == 500 || error.response.status == 404) {
@@ -255,9 +265,14 @@ export default {
         );
       }
     },
+
+
     chargeProfilePic() {
       this.fotoPerfil = this.$refs.profilePic.files[0];
+      this.showPreview(this.fotoPerfil);
     },
+
+
     changePasswState() {
       this.$refs.passwordInput.disabled = !this.$refs.passwCKB.checked;
       if (this.$refs.passwCKB.checked == true) {
@@ -265,23 +280,50 @@ export default {
       }
     },
 
+
     buildTiendaData() {
       let chagPassw = this.$refs.passwCKB.checked;
       return {
-        usuario_id: this.usuario_id, tienda_id: this.tienda_id,
-        direccion_id: this.direccion_id, usuario_email: this.email,
-        usuario_telefono: this.telefono, usuario_cedula: this.cedula,
-        usuario_nom_usr: this.usuario, usuario_nombre_compl: this.nombreCompleto,
-        usuario_tipo: this.tipoUsario, usuario_foto: this.nombreFoto,
-        direccion_pais: this.pais, direccion_provincia: this.provincia,
-        direccion_canton: this.canton, tienda_descripcion: this.detalles,
+        usuario_id: this.usuario_id,
+        tienda_id: this.tienda_id,
+        direccion_id: this.direccion_id,
+        usuario_email: this.email,
+        usuario_telefono: this.telefono,
+        usuario_cedula: this.cedula,
+        usuario_nom_usr: this.usuario,
+        usuario_nombre_compl: this.nombreCompleto,
+        usuario_tipo: this.tipoUsario,
+        usuario_foto: this.nombreFoto,
+        direccion_pais: this.pais,
+        direccion_provincia: this.provincia,
+        direccion_canton: this.canton,
+        tienda_descripcion: this.detalles,
         usuario_contrasenna: chagPassw ? this.$refs.passwordInput.value : null,
       };
     },
 
+
     exit() {
       localStorage.removeItem("userId");
       this.$router.back();
+    },
+
+
+    showPreview(file) {
+      if (file) {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        let self = this;
+        fileReader.addEventListener("load", function () {
+          self.$refs.profPic.src = this.result;
+        });
+      }
+    },
+
+
+    openSocialModal(){
+      this.$refs.modalComponet.resetData();
+      this.$bvModal.show('modal');
     },
   },
 };
@@ -350,8 +392,6 @@ input {
   border-radius: 100px;
   height: 150px;
   width: 150px;
-  top: 25%;
-  left: 33%;
 }
 
 .action-buttons {

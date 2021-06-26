@@ -5,7 +5,7 @@
       <div class="main-button-container">
         <b-button class="action-buttons" variant="success" type="submit">Guardar cambios</b-button>
         <b-button class="action-buttons" @click="exit()">Cancelar</b-button>
-        <b-button class="action-buttons" variant="danger">Eliminar mi cuenta</b-button>
+        
       </div>
     </h1>
     <div class="row" v-on:submit.prevent="saveData">
@@ -219,6 +219,7 @@ export default {
 
     chargeProfilePic() {
       this.fotoPerfil = this.$refs.profilePic.files[0];
+      this.showPreview(this.fotoPerfil);
     },
 
     changePasswState() {
@@ -231,6 +232,16 @@ export default {
     exit() {
       //localStorage.removeItem("userId");
       this.$router.back();
+    },
+    showPreview(file) {
+      if (file) {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        let self = this;
+        fileReader.addEventListener("load", function () {
+          self.$refs.profPic.src = this.result;
+        });    
+      }
     },
   },
 };
@@ -287,8 +298,6 @@ input {
   border-radius: 100px;
   height: 150px;
   width: 150px;
-  top: 25%;
-  left: 33%;
 }
 
 .action-buttons {
