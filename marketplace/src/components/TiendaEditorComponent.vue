@@ -7,8 +7,6 @@
           <b-button class="action-buttons" variant="success" type="submit">Guardar cambios</b-button>
           <b-button class="action-buttons" @click="openSocialModal()">Redes Sociales</b-button>
           <b-button class="action-buttons" @click="exit()">Cancelar</b-button>
-          <b-button class="action-buttons" variant="danger">Eliminar mi cuenta</b-button
-          >
         </div>
       </h1>
       <div class="row" v-on:submit.prevent="saveData">
