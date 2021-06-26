@@ -10,20 +10,17 @@
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
         <b-collapse id="nav-collapse" is-nav>
-            <b-navbar-nav>
-                <b-nav-item href="#">Link</b-nav-item>
-
-            </b-navbar-nav>
-
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
-
+                <b-navbar-nav>
+                    <b-nav-item href="#" @click="goInicio()">Inicio</b-nav-item>
+                </b-navbar-nav>
                 <b-nav-item-dropdown right>
                     <!-- Using 'button-content' slot -->
                     <template #button-content>
-                        <em>User</em>
+                        <em>Usuario</em>
                     </template>
-                
+
                     <b-dropdown-item @click="goHome" href="#">Cerrar Session</b-dropdown-item>
                 </b-nav-item-dropdown>
                 <b-nav-item-dropdown>
@@ -97,16 +94,16 @@ export default {
         idProductoEditar: null
     }),
     mounted() {
-        if(localStorage.getItem("id_user")){
+        if (localStorage.getItem("id_user")) {
             this.getDeseo();
             this.getSuscripcion();
             this.getCarrito();
         }
-       
+
     },
     methods: {
-        pasarComprarTodo(){
-               this.$router.push("CompraCrud");
+        pasarComprarTodo() {
+            this.$router.push("CompraCrud");
         },
         irProductoDeseo(idProducto) {
             localStorage.setItem("id_producto", idProducto);
@@ -124,9 +121,9 @@ export default {
             var objetoReporte = new Object();
             objetoReporte.idComprador = localStorage.getItem('comprador_id');
             objetoReporte.idProducto = this.idProductoEditar;
-            var aux=document.getElementById('txtCantidad').value;
+            var aux = document.getElementById('txtCantidad').value;
             objetoReporte.cantidad = aux;
-          axios.put(process.env.VUE_APP_API_URL + "editar_carrito", JSON.stringify(objetoReporte))
+            axios.put(process.env.VUE_APP_API_URL + "editar_carrito", JSON.stringify(objetoReporte))
                 .then((respose) => {
                     this.getCarrito();
                 });
@@ -187,10 +184,12 @@ export default {
                 this.getCarrito();
             });
         },
-        goHome(){
+        goHome() {
             this.$router.push('/')
-        
-            
+
+        },
+        goInicio() {
+            this.$router.push('dashboardComprador')
         }
     }
 };
