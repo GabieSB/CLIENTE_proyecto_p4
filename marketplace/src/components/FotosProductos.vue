@@ -55,7 +55,7 @@
                             <!--b-button squared>Agregar al Carrito</b-button-->
                             <b-button v-b-modal.modal-prevent-closingo variant="primary">Agregar a carrito</b-button>
                             <b-modal id="modal-prevent-closingo" ref="modal" title="Cantidad de unidades" @show="resetModal" @hidden="resetModal" @ok="agregarCarrito">
-                                <b-form-input id="txtCantidad2" placeholder="Cantidad de productos" type="number" class="input-field"></b-form-input>
+                                <b-form-input id="txtCantidad2" placeholder="Cantidad de productos" type="number" class="input-field" min="1"></b-form-input>
                             </b-modal>
                         </b-col>
                         <br />

@@ -74,7 +74,7 @@
 
                         <b-button squared variant="primary" @click="pasarComprarTodo()">Comprar todo</b-button>
                         <b-modal id="modal-prevent-closing2" ref="modal" title="EditarCarrito" @show="resetModal" @hidden="resetModal" @ok="handleOk">
-                            <b-form-input id="txtCantidad" placeholder="Cantidad de productos" type="number" class="input-field"></b-form-input>
+                            <b-form-input id="txtCantidad" placeholder="Cantidad de productos" type="number" class="input-field" min="1"></b-form-input>
                         </b-modal>
                     </b-dropdown-item>
 
