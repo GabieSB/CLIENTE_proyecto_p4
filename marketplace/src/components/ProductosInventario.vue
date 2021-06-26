@@ -75,7 +75,7 @@
             producto.pais + ", " + producto.provincia + ", " + producto.canton
           }}
         </p>
-        <small class="text-muted">Publicado: {{ producto.publicacion }}</small>
+        <small class="text-muted">Publicado: {{ producto.fechaFormater }}</small>
 
       </div>
       
@@ -175,7 +175,9 @@ export default {
       var selectionarCategoria =
         document.getElementById("selectCategoria").value;
       var ur = "";
-
+      // si se ha ingresado algo al buscador y se ha seleccionado una categoría
+      //se ingresan los parametros de acuerdo a los seleccionados
+      
       if (buscar.length != 0 && selectionarCategoria.length != 0) {
         ur =
           "get_productosTiendas/" +
@@ -205,6 +207,7 @@ export default {
         )
         .then((respose) => {
           this.productos = respose.data;
+          this.getFormatoFecha()
           this.getPhotoPreview();
         
         });
@@ -219,6 +222,15 @@ export default {
       }
     },
 
+    getFormatoFecha() {
+
+            for (var i = 0; i < this.productos.length; i++) {
+                let current_datetime = new Date(this.productos[i].publicacion)
+                let formatted_date = current_datetime.getDate() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getFullYear()
+                this.productos[i].fechaFormater = formatted_date;
+            }
+    } ,
+  
     getCategorias() {
       console.log(this.tiendaId);
       axios

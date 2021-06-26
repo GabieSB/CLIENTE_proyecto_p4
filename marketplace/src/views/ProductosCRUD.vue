@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header></Header>
+    <HeaderTienda></HeaderTienda>
     <div class="container-fluid px-5 mt-1 d-flex flex-column">
       <div class="row">
         <h1 class="my-3">{{ mensaje }}</h1>
@@ -187,15 +187,17 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
+import HeaderTienda from "@/components/HeaderTienda.vue";
 import Carousel from "@/components/Carousel.vue";
 import axios from "axios";
+
 
 export default {
   name: "productosCRUD",
   components: {
-    Header,
-    Carousel,
+    HeaderTienda,
+    Carousel 
+,
   },
   data: () => ({
     mensaje: "Agregar Producto",
@@ -232,6 +234,7 @@ export default {
   },
 
   methods: {
+    //se verifica si la vista esta en modo de edicion para cargar los datos del producto
     verificarEdicion() {
       if (localStorage.getItem("id_producto_edit") != "null") {
         this.mensaje = "Editar producto";
@@ -240,6 +243,7 @@ export default {
         this.modoCreacion = false
       }
     },
+    // si esta en modo edicion se tiene la informacion del producto
     getDataProducto() {
       var url =
         process.env.VUE_APP_API_URL +
@@ -266,6 +270,7 @@ export default {
         })
         .catch((error) => {});
     },
+    // si esta en modo edicion se obtienen las imagenes
     getImagenesProducto() {
       var url =
         process.env.VUE_APP_API_URL +
@@ -284,6 +289,7 @@ export default {
         })
         .catch((error) => {});
     },
+    //las categorias que se muestran al registrar el producto
     getCategorias() {
       var url = process.env.VUE_APP_API_URL + "get_categorias";
       axios
@@ -293,6 +299,7 @@ export default {
         })
         .catch((error) => {});
     },
+    // si se preciona el boton de guardar dependiento el modo compra o actualiza
     onSubmit(event) {
       
       if(this.modoCreacion){
@@ -309,7 +316,7 @@ export default {
 
       param.append("dataProducto", JSON.stringify(this.form));
      
-
+    //agrega al form data todas la imagenes de la lista para ser enviadas
       for (var i = 0; i < this.image_list.length; i++) {
         param.append("file", this.image_list[i]);
       }
@@ -330,6 +337,7 @@ export default {
         });
 
     },
+    //mismo procesos de creacion
     update_product(event){
       let param = new FormData();
        console.log( JSON.stringify(this.form))
@@ -360,8 +368,9 @@ export default {
 
 
     },
+    //este evento mostrara cada imagen al ser cargada por el usuario y que la pueda previsualizar
     onFileChange(event) {
-      console.log("iamgenes modificadas ")
+     
       this.imagenesModificadas = true
       var input = event.target;
       var count = input.files.length;
@@ -379,7 +388,7 @@ export default {
         }
       }
     },
-
+//elimina la imgagen de la preview y de la lista
     deleteImagePreview(index) {
       let imageToDelete = this.preview_list[index]
 
@@ -392,7 +401,7 @@ export default {
       this.image_list.splice(index, 1);
 
     },
-
+  // se obtiene la info de la empresa que poseera el producto
     getDataTienda() {
       const id_user = localStorage.getItem("id_user");
       axios

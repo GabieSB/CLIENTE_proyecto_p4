@@ -25,6 +25,7 @@
       <b-table striped hover :items="items" :fields="fields"></b-table>
     
     </div>
+    <h2 v-if="items.length == 0">No existen ofertas registradas</h2>
      <span class="px-2">Generado el {{fecha}}</span>
 
     <b-modal

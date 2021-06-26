@@ -29,8 +29,11 @@
         :data="chartData"
         :options="options"
       ></BarChart>
+        <h2 v-if="items.length == 0">No existen compras registradas</h2>
+   
     </div>
-    <span class="px-2">Generado el {{fecha}}</span>
+     <span class="px-2">Generado el {{fecha}}</span>
+  
 
     <b-modal
       hide-footer
@@ -65,9 +68,6 @@
         </b-form-group>
       </form>
       <div class="actions">
-        <b-button class="mt-2" variant="info" block
-          >Generar de ventas del día</b-button
-        >
         <b-button class="mt-2" variant="primary" @click="generar" block
           >Generar</b-button
         >
@@ -155,8 +155,10 @@ export default {
     this.endDate = new Date().toISOString().split("T")[0];
     aux.setDate(aux.getDate() - 10);
     this.startDate = aux.toISOString().split("T")[0];
+    this.getFormatoFechaHoras()
   },
   methods: {
+    // se obtiene las compras del usuario logeado en la base de datos
     getCompras() {
       var url =
         process.env.VUE_APP_API_URL +
@@ -173,14 +175,15 @@ export default {
           this.items = response.data; //llenamos el vector con los datos JSON obtenidos
           if(this.items.length > 0){
             console.log(this.items);
-            this.getFormatoFecha();
-            this.getTotal();
-            this.getProductosMasGastado();
+            this.getFormatoFecha(); //cambia el formato de fecha a  uno más legible
+            this.getTotal();// calcula el total de las compras
+            this.getProductosMasGastado(); 
             this.nombre_usuario = this.items[0].nombre_usuario
           }
         })
         .catch((error) => {});
     },
+    //se obtienen los productos en los que se ha gastado mas dinero
     getProductosMasGastado() {
       var url =
         process.env.VUE_APP_API_URL +
@@ -203,6 +206,16 @@ export default {
     print() {
       window.print();
     },
+    getFormatoFechaHoras() {
+        let current_datetime = new Date()
+        let formatted_date =
+          current_datetime.getDate() +
+          "-" +
+          (current_datetime.getMonth() + 1) +
+          "-" +
+          current_datetime.getFullYear() + " " + current_datetime.getHours() + ":"+ current_datetime.getMinutes();
+        this.fecha = formatted_date
+    },
     getFormatoFecha() {
       for (var i = 0; i < this.items.length; i++) {
         let current_datetime = new Date(this.items[i].fecha_publicacion);
@@ -224,9 +237,9 @@ export default {
       this.getCompras();
       this.modalShow = false;
     },
+    // en este método se pasa toda la información que  necesita el char para generarse
     generarChart() {
-      console.log("in geenrar chart");
-      console.log(this.itemsChart.length);
+     
       for (var i = 0; i < this.itemsChart.length; i++) {
         this.chartData.labels[i] = this.itemsChart[i].nombre_producto;
         var color = this.random_rgba();

@@ -23,8 +23,8 @@
                     <template #button-content>
                         <em>User</em>
                     </template>
-                    <b-dropdown-item href="#">Profile</b-dropdown-item>
-                    <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+                
+                    <b-dropdown-item @click="goHome" href="#">Cerrar Session</b-dropdown-item>
                 </b-nav-item-dropdown>
                 <b-nav-item-dropdown>
                     <template #button-content>
@@ -97,9 +97,12 @@ export default {
         idProductoEditar: null
     }),
     mounted() {
-        this.getDeseo();
-        this.getSuscripcion();
-        this.getCarrito();
+        if(localStorage.getItem("id_user")){
+            this.getDeseo();
+            this.getSuscripcion();
+            this.getCarrito();
+        }
+       
     },
     methods: {
         pasarComprarTodo(){
@@ -183,6 +186,13 @@ export default {
                 localStorage.getItem('comprador_id') + '/' + idProducto).then((respose) => {
                 this.getCarrito();
             });
+        },
+        goHome(){
+          
+                localStorage.removeItem('comprador_id')
+            this.$router.push('/')
+        
+            
         }
     }
 };
