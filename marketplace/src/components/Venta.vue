@@ -30,7 +30,8 @@
     </b-row>
     <b-row>
         <b-col>
-            <input type="text" id="cvv" class="fadeIn second" name="cvv" placeholder="cvv" required /></b-col>
+            <h4>CVV:</h4><input type="number" id="cvv" class="fadeIn second" name="cvv" placeholder="cvv" size="3" required min="0" maxlength="3" />
+        </b-col>
         <b-col>
             <b-button variant="danger" @click="comprar()" v-if="carrito.length">Comprar</b-button>
         </b-col>
@@ -59,6 +60,7 @@ export default {
         this.getDirrecionEnvio();
     },
     methods: {
+        //obtener los productos del carito
         getCarrito() {
             axios.get(process.env.VUE_APP_API_URL + 'get_miCarrito/' + localStorage.getItem('comprador_id'))
                 .then((respose) => {
@@ -84,6 +86,7 @@ export default {
 
                 })
         },
+        //obtner las formas de pago 
         getFormasPago() {
             axios
                 .get(process.env.VUE_APP_API_URL + "get_formaPago/" + localStorage.getItem('comprador_id'))
@@ -108,11 +111,13 @@ export default {
 
                 });
         },
+        //obtener las direciones de envio 
         getDirrecionEnvio() {
             axios
                 .get(process.env.VUE_APP_API_URL + "get_DirrecionEnvio/" + localStorage.getItem('comprador_id'))
                 .then((response) => {
                     var aux = [];
+                     this.selected2,
                     aux[0] = {
                         value: null,
                         text: "Selecione una dirreción"
@@ -136,7 +141,6 @@ export default {
             return process.env.VUE_APP_API_URL + "get_foto/" + x;
         },
         comprar() {
-
             self = this;
             this.$alertify.confirm('¿Desea comprar los productos?',
                 function () {
@@ -146,6 +150,7 @@ export default {
             );
 
         },
+        //realizar compra de los productos del carrito
         realizarCompra() {
 
             var formaPago = document.getElementById("fmPago").value;
@@ -153,20 +158,19 @@ export default {
             var dirrecion = document.getElementById("dirrecion").value;
             axios.get(process.env.VUE_APP_API_URL + 'get_comprar/' + localStorage.getItem('comprador_id') + '/' + formaPago + '/' + cv + '/' + dirrecion)
                 .then((respose) => {
-                    
+
                     localStorage.setItem('factura_id', respose.data[1])
                     this.getCarrito();
-                  
+
                     let routeUrl = this.$router.resolve({
                         path: "/reporte-factura",
                     });
 
                     window.open(routeUrl.href, '_blank');
-                }).catch((error)=>{
+                }).catch((error) => {
                     this.$alertify.error(error.response.data)
                 })
 
-                
         },
         eliminarProductoCarrito(idProducto) {
             self = this;
