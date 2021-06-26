@@ -1,8 +1,8 @@
 <template>
 <div class="contenedor" id="divProductos">
-    <div>
-        <b-form-select id="selectCategoria" v-model="selected" :options="categorias" class="mb-3" @change="buscarProductos()"></b-form-select>
-        <input type="search" id="buscar" @keyup="buscarProductos()" class="fadeIn second" name="buscar" placeholder="Buscar" required />
+    <div class="buscar">
+        <b-form-select id="selectCategoria" v-model="selected" :options="categorias" class="mb-3 input-field" @change="buscarProductos()"></b-form-select>
+        <input type="search" id="buscar" @keyup="buscarProductos()" class="fadeIn second input-field" name="buscar" placeholder="Buscar" required />
     </div>
 
     <div class="contenedor_productos" v-for="producto in productos" :key="producto.producto_id">
@@ -158,6 +158,7 @@ export default {
     font-size: 14px;
     background: rgb(255, 255, 255);
     border: solid 2px rgb(205, 206, 206);
+     border-radius: 15px;
 }
 
 .data-producto {
@@ -199,4 +200,20 @@ export default {
     padding-top: 3px;
     padding-bottom: 3px;
 }
+.input-field {
+  width: auto;
+  height: 40px;
+  border: solid 1px rgb(3, 133, 226);
+  border-radius: 5px;
+  background-color: whitesmoke;
+  margin: 0 10px;
+  text-align: start;
+  padding: 5px;
+}
+.buscar{
+    margin: 10px 20px;
+    border-radius: 15px;
+
+}
+
 </style>

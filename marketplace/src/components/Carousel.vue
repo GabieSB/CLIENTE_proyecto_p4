@@ -1,7 +1,11 @@
 <template>
 <div>
-    <h1>Productos más vendidos</h1>
-    <b-container-fluid>
+    <div class="d-flex justify-content-center my-3" >
+          <h1>Productos más vendidos</h1>
+    </div>
+  
+    <b-container-fluid >
+        
         <div id="carouselProdutos" v-for="producto in productosVendidos" :key="producto.producto_id">
             <b-card id='card-producto' @click="irDescripcioProducto(producto.producto_id)" v-bind:img-src="producto.fotoSRC" v-model="producto.producto_id" img-alt="Image" img-top tag="article" class="card mb-2">
                 <h5 class="title">{{ producto.nombre }}</h5>
@@ -12,26 +16,14 @@
                     <b-card-text class="detalle-producto">
                         Precio: ₡{{ producto.precio }}
                     </b-card-text>
-                    <b-card-text class="detalle-producto">
-                        Stock: {{ producto.cantidad }} unid.
-                    </b-card-text>
-                    <b-card-text class="detalle-producto">
-                        Promedio de envío: {{ producto.prom_envio }}
-                    </b-card-text>
-                    <b-card-text class="detalle-producto">
-                        Costo envio: ₡{{ producto.cost_envio}}
-                    </b-card-text>
                     <b-card-text v-if="producto.oferta > 0" class="detalle-producto">
-                        Precio oferta:{{ producto.oferta}}
+                        Precio oferta: ₡{{ producto.oferta}}
                     </b-card-text>
                     <b-card-text class="detalle-producto">
-                        Vendidos:{{ producto.vendidos}}
+                        Vendidos: {{ producto.vendidos}}
                     </b-card-text>
-                    <p style="width: 200px" class="detalle-producto mt-1">
-                        📍
-                        {{producto.pais + ", " + producto.provincia + ", " + producto.canton }}
-                    </p>
-                    <small class="text-muted">Publicado: {{ producto.fechaFormato }}</small>
+                    
+                  
                 </div>
             </b-card>
         </div>

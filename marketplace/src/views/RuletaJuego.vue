@@ -10,6 +10,7 @@
 </template>
 <script>
 import Ruleta from "@/components/Ruleta.vue";
+//Este componente fue basado en https://github.com/aqidd/vue-roulette/blob/master/index.html
 import axios from "axios";
 import Header from "@/components/Header.vue";
 import SidebarComponent from "@/components/SidebarComponent.vue"

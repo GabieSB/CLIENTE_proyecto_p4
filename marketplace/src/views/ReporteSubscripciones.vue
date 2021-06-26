@@ -33,6 +33,7 @@
                 <span class=" precio mx-4" v-if="data.value.length == 0">No hay productos agregados</span>
             </template>
         </b-table>
+        <h2 v-if="items.length == 0">No existen subscripciones registradas</h2>
 
     </div>
     <span class="px-2">Generado el {{fecha}}</span>

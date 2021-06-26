@@ -1,20 +1,25 @@
 <template>
   <div class="contenedor" id="divTienda">
-    <div>
-        <input
+      <h1>Tiendas</h1>
+    <div class="tiendas">
+        <div class="filtros">
+         
+              <input
           id="buscar"
           type="search"
           @keyup="buscarProductos()"
           class="fadeIn second input-field"
           name="buscar"
-          placeholder="Buscar"
+          placeholder="Buscar por nombre"
           required
         />
-      <div
+            
+        </div>
+        <div
         class="cads-tienda"
         v-for="tienda in tiendas"
         :key="tienda.tienda_id"
-      >
+        >
         
         <b-card
           v-bind:title="tienda.nombre"
@@ -36,6 +41,8 @@
           >
         </b-card>
       </div>
+      
+      
     </div>
   </div>
 </template>
@@ -86,13 +93,11 @@ export default {
       if(buscar.length > 0){
         axios.get(process.env.VUE_APP_API_URL + "get_tiendas_by_param/" + buscar).then((respose) => {
         this.tiendas = respose.data
+         this.getPhotoPreview();
       });
       }else{
           this.getTiendas()
       }
-     
-      
-     
     },
   },
   props: {
@@ -115,5 +120,25 @@ export default {
   float: left;
   padding-left: 80px;
   padding-top: 15px;
+}
+
+.filtros{
+    display: flex;
+    justify-content: flex-start;
+    border:solid 2px rgb(230, 230, 230);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 15px;
+    height: auto;
+}
+.input-field {
+  width: auto;
+  height: 40px;
+  border: solid 1px rgb(3, 133, 226);
+  border-radius: 5px;
+  background-color: whitesmoke;
+  margin: 0 10px;
+  text-align: start;
+  padding: 5px;
 }
 </style>

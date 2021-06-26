@@ -10,6 +10,8 @@
           <span><b>Usted tiene: </b></span>
           <span> ❤ {{subscripciones}} subscriptores </span>
           <span> 👎 {{denuncias}} denuncias  </span>
+           <span>  Calificación :  {{calificacion}} ⭐</span>
+
           <span class="baneo" v-if="denuncias > 10"> <b>Su tienda fue baneada por tener más de 10 denuncias, los usuarios no podran ver más su tienda.</b>  </span>
         </div>
       </div>
@@ -27,7 +29,7 @@
           >
         </b-card>
         <b-card
-          img-src="https://booster.io/wp-content/uploads/product-add-to-cart-e1438362099361.png"
+          img-src="https://www.iconbunny.com/icons/media/catalog/product/3/1/3142.9-files-drawer-icon-iconbunny.jpg"
           img-alt="Image"
           img-top
           tag="article"
@@ -39,7 +41,7 @@
           >
         </b-card>
         <b-card
-          img-src="https://booster.io/wp-content/uploads/product-add-to-cart-e1438362099361.png"
+          img-src="https://www.iconbunny.com/icons/media/catalog/product/1/5/1543.9-clients-icon-iconbunny.jpg"
           img-alt="Image"
           img-top
           tag="article"
@@ -51,7 +53,7 @@
           >
         </b-card>
         <b-card
-          img-src="https://booster.io/wp-content/uploads/product-add-to-cart-e1438362099361.png"
+          img-src="https://www.iconbunny.com/icons/media/catalog/product/1/6/169.9-single-message-bubble-icon-iconbunny.jpg"
           img-alt="Image"
           img-top
           tag="article"
@@ -63,7 +65,7 @@
           >
         </b-card>
         <b-card
-          img-src="https://booster.io/wp-content/uploads/product-add-to-cart-e1438362099361.png"
+          img-src="https://www.iconbunny.com/icons/media/catalog/product/6/0/605.9-sales-icon-iconbunny.jpg"
           img-alt="Image"
           img-top
           tag="article"
@@ -125,12 +127,18 @@ export default {
     tienda_id: "",
     denuncias: "",
     subscripciones: "",
+    calificacion: "",
   }),
   mounted() {
+    
     this.getDataTienda();
     this.getDenuncias()
     this.getSubscripciones()
+    this.getCalificacionTienda()
     localStorage.setItem("id_producto_edit", null);
+
+    
+  
   },
   methods: {
     checkFormValidity() {
@@ -190,6 +198,7 @@ export default {
      localStorage.setItem("tienda_nombre", this.nombreTienda)
      window.open(routeUrl .href, '_blank');
     },
+    //se obtiene la información de la tienda usando el id_user que fue almacenado en locar storage al iniciar sesión
     getDataTienda() {
       const id_user = localStorage.getItem("id_user");
 
@@ -197,8 +206,7 @@ export default {
         .get(process.env.VUE_APP_API_URL + "getTiendaByUserId/" + id_user)
         .then((response) => {
           if (response.statusText == "OK") {
-            localStorage.setItem("id_tienda", response.data.tienda_id); //aqui iria guardado el token, si tuvieramos una papa de Timmy.jpg
-            this.tienda_id = response.data.tienda_id
+            localStorage.setItem("id_tienda", response.data.tienda_id);
             console.log(response.data.tienda_id)
             this.nombreTienda = response.data.usuario_nombre_completo;
             console.log(
@@ -217,6 +225,7 @@ export default {
           }
         });
     },
+    //obtiene la cantidad de denuncias de la tienda 
      getDenuncias() {
        console.log(process.env.VUE_APP_API_URL + "get_denuncias_by_id/" +  localStorage.getItem("id_tienda"))
         axios
@@ -231,6 +240,22 @@ export default {
         });
 
     },
+     getCalificacionTienda() {
+       console.log(process.env.VUE_APP_API_URL + "get_calificacion_by_tienda_id/" +  localStorage.getItem("id_tienda"))
+        axios
+        .get(process.env.VUE_APP_API_URL + "get_calificacion_by_tienda_id/" +  localStorage.getItem("id_tienda"))
+        .then((response) => {
+          this.calificacion = response.data 
+          console.log(this.calificacion)
+          
+        })
+        .catch((error) => {
+          
+          this.$alertify.error(error.response.data);
+        });
+
+    },
+    //obtiene la cantidad subscripciones de la tienda 
     getSubscripciones() {
       var url =
         process.env.VUE_APP_API_URL +
