@@ -114,8 +114,6 @@ export default {
   name: "ReporteVentas",
   components: {
     Header,
-   
-
   },
   data: () => ({
     idTienda: "",
@@ -267,8 +265,6 @@ export default {
         this.modalShow = false
         this.getOfertas()
       }
-      
-    
 
     },
     cerrar() {

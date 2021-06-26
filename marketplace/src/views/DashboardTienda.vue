@@ -10,7 +10,7 @@
           <span><b>Usted tiene: </b></span>
           <span> ❤ {{subscripciones}} subscriptores </span>
           <span> 👎 {{denuncias}} denuncias  </span>
-          <span class="baneo" v-if="denuncias == 0"> <b>Su tienda fue baneada por tener más de 10 denuncias, los usuarios no podran ver más su tienda.</b>  </span>
+          <span class="baneo" v-if="denuncias > 10"> <b>Su tienda fue baneada por tener más de 10 denuncias, los usuarios no podran ver más su tienda.</b>  </span>
         </div>
       </div>
       <div class="row m-5">
@@ -218,7 +218,7 @@ export default {
         });
     },
      getDenuncias() {
-       console.log(process.env.VUE_APP_API_URL + "get_denuncias_by_id/" + this.tienda_id)
+       console.log(process.env.VUE_APP_API_URL + "get_denuncias_by_id/" +  localStorage.getItem("id_tienda"))
         axios
         .get(process.env.VUE_APP_API_URL + "get_denuncias_by_id/" +  localStorage.getItem("id_tienda"))
         .then((response) => {

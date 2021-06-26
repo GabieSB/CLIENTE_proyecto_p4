@@ -167,6 +167,11 @@ const routes = [
     name: 'productoTienda',
     component: () => import('../views/ProductoTienda.vue')
   },
+  {
+    path: '/ruleta',
+    name: 'ruleta',
+    component: () => import('../views/RuletaJuego.vue')
+  },
   
 ];
 

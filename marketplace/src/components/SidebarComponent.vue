@@ -14,11 +14,15 @@
                 <nav class="mb-3">
                     <b-nav vertical v-if="tipoUsuario!='c'">
                         <b-button @click="goReporteCompras()">Reporte Compras</b-button>
+                        <br>
                         <b-button @click="goReporteSuscripciones()">Reporte Subscripciones</b-button>
+                        <br>
                         <b-button @click="goReporteOfertas()">Reporte ofertas</b-button>
+                        <br>
+                        <b-button @click="goRuleta()">Jugar a la ruleta</b-button>
                     </b-nav>
                 </nav>
-                <b-button variant="primary" block @click="hide">Close Sidebar</b-button>
+                <b-button variant="primary" block @click="hide">Cerrar menú</b-button>
             </div>
         </template>
     </b-sidebar>
@@ -102,6 +106,10 @@ export default {
                 path: "/reporte-ofertas",
             });
             window.open(routeUrl.href, '_blank');
+        },
+        goRuleta() {
+
+           this.$router.push('ruleta')
         }
     }
 };
