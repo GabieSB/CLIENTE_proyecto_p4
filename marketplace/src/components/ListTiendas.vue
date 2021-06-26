@@ -1,5 +1,7 @@
-<template>
+<template><div><h1>Tiendas</h1>
 <div class="contenedor" id="divTienda">
+   
+    <b-container-fluid>
     <div>
         <div class="cads-tienda" v-for="tienda in tiendas" :key="tienda.tienda_id">
 
@@ -11,12 +13,11 @@
                     {{tienda.pais}} {{tienda.provincia}} {{tienda.canton}}
                 </b-card-text>
                   <b-button variant="primary" @click="irTienda(tienda.tienda_id)">ir</b-button>
-                
             </b-card>
             
         </div>
-    </div>
-</div>
+    </div></b-container-fluid>
+</div></div>
 </template>
 
 <script>

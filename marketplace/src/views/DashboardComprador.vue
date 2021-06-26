@@ -2,8 +2,13 @@
 <div>
     <Header></Header>
     <SidebarComponent></SidebarComponent>
-    <Carousel></Carousel>
-     <ListTiendas></ListTiendas>
+    <b-col>
+    <b-row>
+          <Carousel></Carousel>
+    </b-row>
+    <b-row>
+      <ListTiendas></ListTiendas>
+    </b-row></b-col>
     <!--h1>Soy un comprador</h1-->
 
 </div>
@@ -20,7 +25,7 @@ export default {
         Header,
         SidebarComponent,
         Carousel,
-       ListTiendas,
+        ListTiendas,
 
     }
 

@@ -7,11 +7,22 @@
         <b-card-text>
             <h4>Correo: {{tienda.correo}}</h4>
         </b-card-text>
-           <b-card-text>  
+        <b-card-text>
             <h4>Dirreción: {{tienda.pais}},{{tienda.provincia}},{{tienda.canton}}</h4>
         </b-card-text>
         <b-card-text>
-            <b-form-checkbox @change="cambiar()" id="susb" switch size="lg" v-model="status" value="accepted" unchecked-value="not_accepted">Suscripción</b-form-checkbox>
+            <b-row>
+                <b-col>
+                    Calificar:
+                    <b-form-rating class="calificar" id="rating-inline" v-model="value" variant="warning" @change="setEditarCalificacion()"></b-form-rating>
+                </b-col>
+                <b-col>
+                    <b-form-checkbox @change="cambiar()" id="susb" switch size="lg" v-model="status" value="accepted" unchecked-value="not_accepted">Suscripción</b-form-checkbox>
+                </b-col>
+            </b-row>
+        </b-card-text>
+        <b-card-text>
+
         </b-card-text>
         <b-card-text>
 
@@ -20,9 +31,9 @@
                 <b-modal id="modal-prevent-closing" ref="modal" title="Envie su reporte" @show="resetModal" @hidden="resetModal" @ok="handleOk">
                     <input type="text" id="txtReporte" class="fadeIn second" name="reporte" placeholder="Descripción reporte" required />
                 </b-modal>
-                 <b-button variant='danger' v-if="reportesR==1" @click="elimanarReporte()">Eliminar Reporte</b-button>
+                <b-button variant='danger' v-if="reportesR==1" @click="elimanarReporte()">Eliminar Reporte</b-button>
             </div>
-            
+
         </b-card-text>
 
     </b-card>
@@ -42,14 +53,16 @@ export default {
         subscripcion: [],
         status: 'not_accepted',
         tienda: null,
-        comp:null,
-        reportesR:null
+        comp: null,
+        reportesR: null,
+        value: null
     }),
     mounted() {
         this.getSuscripcion();
         this.getTienda();
         this.comprasRealizadas();
         this.reportesRealizados();
+        this.getObtenerCalificacion();
     },
     methods: {
         showModal() {
@@ -72,8 +85,8 @@ export default {
             objetoReporte.descripcion = document.getElementById('txtReporte').value;
             axios.post(process.env.VUE_APP_API_URL + "agregar_reporte", JSON.stringify(objetoReporte))
                 .then((respose) => {
-                        this.comprasRealizadas();
-                        this.reportesRealizados();
+                    this.comprasRealizadas();
+                    this.reportesRealizados();
                 });
         },
 
@@ -117,20 +130,20 @@ export default {
                 })
 
         },
-        comprasRealizadas(){
-              axios.get(process.env.VUE_APP_API_URL + 'get_reporteFactura/'+localStorage.getItem('comprador_id')+'/'+ localStorage.getItem('id_tienda'))
+        comprasRealizadas() {
+            axios.get(process.env.VUE_APP_API_URL + 'get_reporteFactura/' + localStorage.getItem('comprador_id') + '/' + localStorage.getItem('id_tienda'))
                 .then((respose) => {
                     this.comp = respose.data.cantidad;
-                    
-                })       
+
+                })
         },
-        reportesRealizados(){
-              axios.get(process.env.VUE_APP_API_URL + 'get_reportesRealizados/'+localStorage.getItem('comprador_id')+'/'+ localStorage.getItem('id_tienda'))
+        reportesRealizados() {
+            axios.get(process.env.VUE_APP_API_URL + 'get_reportesRealizados/' + localStorage.getItem('comprador_id') + '/' + localStorage.getItem('id_tienda'))
                 .then((respose) => {
                     this.reportesR = respose.data.cantidad;
-                })       
+                })
         },
-         elimanarReporte() {
+        elimanarReporte() {
             self = this;
             this.$alertify.confirm('¿Desea eliminar el reporte?',
                 function () {
@@ -139,11 +152,35 @@ export default {
                 function () {});
 
         },
-        eliminar(){
+        eliminar() {
             axios.delete(process.env.VUE_APP_API_URL + "eliminar_reporte/" +
-                    localStorage.getItem('comprador_id') + '/' +
-                    localStorage.getItem('id_tienda')).then((respose) => {
-                    this.reportesRealizados();
+                localStorage.getItem('comprador_id') + '/' +
+                localStorage.getItem('id_tienda')).then((respose) => {
+                this.reportesRealizados();
+            });
+        },
+        setEditarCalificacion() {
+            var objeto = new Object();
+            objeto.idComprador = localStorage.getItem("comprador_id");
+            objeto.idTienda = localStorage.getItem("id_tienda");
+            objeto.calificacion = this.value;
+            axios.post(
+                process.env.VUE_APP_API_URL + "calificar_tienda",
+                JSON.stringify(objeto)
+            );
+        },
+        getObtenerCalificacion() {
+            var idTienda = localStorage.getItem("id_tienda");
+            axios
+                .get(
+                    process.env.VUE_APP_API_URL +
+                    "get_calificacionTienda/" +
+                    localStorage.getItem("comprador_id") +
+                    "/" +
+                    idTienda
+                )
+                .then((respose) => {
+                    this.value = respose.data[0].calificacion;
                 });
         }
     }
